@@ -18,6 +18,9 @@ Como em um carro, há um sistema embarcado responsavél por uma determinada tare
 		
 
 #4. Cite arquiteturas possíveis e as diferenças entre elas.
-
+	Harvard, von Neumann arquiteturas. A Harvard permite leitura simutanea dos dados
+ e dos programa separadamente otimizados.
 
 #5. Por que usamos o MSP430 na disciplina, ao invés de outro microcontrolador?
+	É um microcontrolador de baixo custo, que apresenta um baixo consumo de energia, com uma CPU pequena e eficiente apresenta um grande numero de registradores, os dados dados da memoria podem serem acessados diretamente sendo com estes permitido a realização de tarefas aritmeticas e ainda apresenta varias opções de clock.
+	
