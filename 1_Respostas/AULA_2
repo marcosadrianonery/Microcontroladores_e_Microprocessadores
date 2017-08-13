@@ -27,14 +27,14 @@ Para este código, responda: (a) A variável i é armazenada na memória RAM ou 
 
 5. Considere a variável inteira i, armazenando o valor 0x8051ABCD. Se i é armazenada na memória a partir do endereço 0x0200, como ficam este byte e os seguintes, considerando que a memória é: (a) Little-endian; (b) Big-endian.
    LITTLE-ENDIAN
-    0xCD -> 0X0203
-    0xAB -> 0X0202
-    0x51 -> 0X0201
-    0x80 -> 0X0200
-  BIG-ENDIAM
-    0x80 -> 0X0203
-    0x51 -> 0X0202
-    0xAB -> 0X0201
     0xCD -> 0X0200
+    0xAB -> 0X0201
+    0x51 -> 0X0202
+    0x80 -> 0X0203
+  BIG-ENDIAM
+    0x80 -> 0X0200
+    0x51 -> 0X0201
+    0xAB -> 0X0202
+    0xCD -> 0X0203
     
 6. Sabendo que o processador do MSP430 tem registradores de 16 bits, como ele soma duas variáveis de 32 bits?
