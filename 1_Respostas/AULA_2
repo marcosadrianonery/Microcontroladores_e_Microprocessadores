@@ -1,6 +1,5 @@
 1. Quais as diferenças entre os barramentos de dados e de endereços?
-  No barramento de dados acontece uma transmição de dados entre as unidades equanto o 
-barramento de endereços seleciona a origem ou destino.
+  O barramento de dados é o responsavel pela transferencia de dados lidos e gravados, e no barramento de endereços denomina-se aonde este dados estão ou serão gravados.
 
 2. Quais são as diferenças entre as memórias RAM e ROM?
   A memoria RAM é volatil aonde é esvaziada assim que é desligada e a memoria ROM é permanente, porem o acesso da memoria RAM é mais veloz que o da memoria ROM.
@@ -19,7 +18,13 @@ int main(void)
 		printf("%d eh par.\n");
 	return 0;
 }
-Para este código, responda: (a) A variável i é armazenada na memória RAM ou ROM? Por quê? (b) O programa compilado a partir deste código é armazenado na memória RAM ou ROM? Por quê?
+Para este código, responda: 
+
+(a) A variável i é armazenada na memória RAM ou ROM? Por quê? 
+	 variável i será armazenada na memória RAM, pois faz parte da execução do programa e seu valor será alterado de acordo com a execução.
+
+(b) O programa compilado a partir deste código é armazenado na memória RAM ou ROM? Por quê?
+	O programa compilado será armazenado na ROM este é salvo para uma proxima utilização.
 
 4. Quais são as diferenças, vantagens e desvantagens das arquiteturas Harvard e Von Neumann?
   Harvard, von Neumann arquiteturas. A Harvard permite leitura simutanea dos dados
@@ -38,3 +43,5 @@ Para este código, responda: (a) A variável i é armazenada na memória RAM ou 
     0xCD -> 0X0203
     
 6. Sabendo que o processador do MSP430 tem registradores de 16 bits, como ele soma duas variáveis de 32 bits?
+
+A soma das variáveis de 32 bits teria de ser feita com o auxílio de registradores auxiliares. As variáveis de 32 bits ocupariam dois registradores de propósito geral, um com os bits mais significativos e outro com os menos significativos. Somaria-se os respectivos valores admitindo no mais significativo o carry da soma dos menos significativos. Caso a flag seja igual a 1, soma-se 1 a soma dos bits mais significativos. O resultado estará em dois registradores ao fim, como foi-se utilizado na escrita do que foi lido, dois registradores. Se ocorrer carry na soma dos bits mais significaticos nos deparamos com um overflow, e para a admissão do dado seria necessario um terceiro registrador para a escrita deste resultado, assim teriamos uma variavel com 48 bits. Caso não seja admissivel o uso de um terceiro registrador, denominamos overflow e o resultado é comprometido apenas constatando os dois registradores antes mencionados.
