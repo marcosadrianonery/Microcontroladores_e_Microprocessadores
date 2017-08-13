@@ -1,3 +1,5 @@
+Data: 11/08/2017
+
 1. Quais as diferenças entre os barramentos de dados e de endereços?
   O barramento de dados é o responsavel pela transferencia de dados lidos e gravados, e no barramento de endereços denomina-se aonde este dados estão ou serão gravados.
 
