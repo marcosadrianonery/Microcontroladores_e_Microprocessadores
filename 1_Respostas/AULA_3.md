@@ -3,21 +3,21 @@
 
 1. Dada uma variável `a` do tipo `char` (um byte), escreva os trechos de código em C para:
 	(a) Somente setar o bit menos significativo de `a`.
-  ```C 
-    a = a | 0x01;
+  ```C
+  	a = a | 0x01;
   ```
 
   (b) Somente setar dois bits de `a`: o menos significativo e o segundo menos significativo.
 	
 ```C 
-    a = a | 0x03;
+	a = a | 0x03;
 ```  
   
   (c) Somente zerar o terceiro bit menos significativo de `a`.
 
-```C
-    a = a & (~0x04);
-    ```
+        ```C
+        a = a & (~0x04);
+```
   
   (d) Somente zerar o terceiro e o quarto bits menos significativo de `a`.
 
