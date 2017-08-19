@@ -10,21 +10,29 @@
   (b) Somente setar dois bits de `a`: o menos significativo e o segundo menos significativo.
 	```C 
     a = a | 0x03;
-  ```  
+  	```  
+  
   (c) Somente zerar o terceiro bit menos significativo de `a`.
-	```C
+
+```C
     a = a & (~0x04);
-  ```
+    ```
+  
   (d) Somente zerar o terceiro e o quarto bits menos significativo de `a`.
-	```C
+
+```C
     a = a & (~0x0C);
   ```	
+  
   (e) Somente inverter o bit mais significativo de `a`.
-	```C
+
+```C
     a = a ^ (0x80);
   ```	
-  (f) Inverter o nibble mais significativo de `a`, e setar o nibble menos significativo de `a`. 
-	```C
+
+(f) Inverter o nibble mais significativo de `a`, e setar o nibble menos significativo de `a`. 
+
+```C
     a = a ^ (0xF0);
     a = a | (0x0F);    
   ```	
