@@ -15,7 +15,7 @@
   
   (c) Somente zerar o terceiro bit menos significativo de `a`.
 
-        ```C
+```C
         a = a & (~0x04);
 ```
   
@@ -23,20 +23,20 @@
 
 ```C
     a = a & (~0x0C);
-  ```	
+```	
   
   (e) Somente inverter o bit mais significativo de `a`.
 
 ```C
     a = a ^ (0x80);
-  ```	
+```	
 
 (f) Inverter o nibble mais significativo de `a`, e setar o nibble menos significativo de `a`. 
 
 ```C
     a = a ^ (0xF0);
-    a = a | (0x0F);    
-  ```	
+    a = a | (0x0F);
+```	
 
 2. Considerando a placa Launchpad do MSP430, escreva o código em C para piscar os dois LEDs ininterruptamente.
 
