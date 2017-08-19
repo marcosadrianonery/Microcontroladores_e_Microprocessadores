@@ -76,10 +76,10 @@ int main(void)
 	
 	while(1)
 	{	while((P1IN & BTN) != 0) {};
-		P1OUT ^= LEDS; // Liga os LEDS (toggle)
-		P1OUT ^= LEDS; // desliga os LEDS (toggle)
-		P1OUT ^= LEDS; // liga os LEDS (toggle)
-		P1OUT ^= LEDS; // desliga os LEDS (toggle)	
+		P1OUT ^= LEDS; // Liga os LEDS
+		P1OUT ^= LEDS; // desliga os LEDS
+		P1OUT ^= LEDS; // liga os LEDS
+		P1OUT ^= LEDS; // desliga os LEDS
 		while((P1IN & BTN) == 0) {};
 	};
 	return 0;
@@ -88,6 +88,77 @@ int main(void)
 
 4. Considerando a placa Launchpad do MSP430, faça uma função em C que pisca os dois LEDs uma vez.
 
+```C
+#include <msp430g2553.h>
+#define LED1 BIT0
+#define LED2 BIT6
+#define LEDS (LED1 | LED2)
+
+void pisca_leds (void)
+{
+	P1OUT ^= LEDS;
+	P1OUT ^= LEDS;
+
+}
+```
+
 5. Reescreva o código da questão 2 usando a função da questão 4.
 
+```C
+#include <msp430g2553.h>
+#define LED1 BIT0
+#define LED2 BIT6
+#define LEDS (LED1 | LED2)
+
+void pisca_leds (void)
+{
+	P1OUT ^= LEDS;
+	P1OUT ^= LEDS;
+
+}
+
+int main(void)
+{
+	WDTCTL = WDTPW | WDTHOLD;
+	P1DIR |= LEDS; // LEDS como saída
+	P1OUT = 0x00; //  Saída em nível baixo
+	while(1)
+		pisca_leds(); // Chama a função e pisca os LEDS (toggle)
+	return 0;
+}
+```
+
+
 6. Reescreva o código da questão 3 usando a função da questão 4.
+
+```C
+#include <msp430g2553.h>
+#define LED1 BIT0
+#define LED2 BIT6
+#define LEDS (LED1 | LED2)
+#define BTN BIT3
+
+void pisca_leds (void)
+{
+	P1OUT ^= LEDS;
+	P1OUT ^= LEDS;
+
+}
+
+int main(void)
+{
+	WDTCTL = WDTPW | WDTHOLD;
+	P1DIR |= LEDS; // LEDS como saída
+	P1OUT = 0x00; //  Saída em nível baixo
+	int auxiliar = 0;
+	
+	while(1)
+	{	while((P1IN & BTN) != 0) {};
+		pisca_leds(); // Chama a função e pisca os LEDS (toggle)
+		pisca_leds(); // Chama a função e pisca os LEDS (toggle)
+		while((P1IN & BTN) == 0) {};
+	};
+	return 0;
+}
+```
+
