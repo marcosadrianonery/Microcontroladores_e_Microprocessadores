@@ -1,7 +1,7 @@
 # Aula 03
 ## Data: 16/08/2017
 
-1. Dada uma variável `a` do tipo `char` (um byte), escreva os trechos de código em C para:
+``1.`` Dada uma variável `a` do tipo `char` (um byte), escreva os trechos de código em C para:
 
 (a) Somente setar o bit menos significativo de `a`.
 	
