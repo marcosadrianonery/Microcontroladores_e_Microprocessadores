@@ -8,9 +8,10 @@
   ```
 
   (b) Somente setar dois bits de `a`: o menos significativo e o segundo menos significativo.
-	```C 
+	
+```C 
     a = a | 0x03;
-  	```  
+    ```  
   
   (c) Somente zerar o terceiro bit menos significativo de `a`.
 
