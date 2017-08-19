@@ -11,7 +11,7 @@
 	
 ```C 
     a = a | 0x03;
-    ```  
+```  
   
   (c) Somente zerar o terceiro bit menos significativo de `a`.
 
