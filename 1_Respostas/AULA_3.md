@@ -94,7 +94,7 @@ int main(void)
 #define LED2 BIT6
 #define LEDS (LED1 | LED2)
 
-void pisca_leds (void)
+void pisca (void)
 {
 	P1OUT ^= LEDS;
 	P1OUT ^= LEDS;
@@ -110,7 +110,7 @@ void pisca_leds (void)
 #define LED2 BIT6
 #define LEDS (LED1 | LED2)
 
-void pisca_leds (void)
+void pisca (void)
 {
 	P1OUT ^= LEDS;
 	P1OUT ^= LEDS;
@@ -123,7 +123,7 @@ int main(void)
 	P1DIR |= LEDS; // LEDS como saída
 	P1OUT = 0x00; //  Saída em nível baixo
 	while(1)
-		pisca_leds(); // Chama a função e pisca os LEDS (toggle)
+		pisca(); // Chama a função e pisca os LEDS (toggle)
 	return 0;
 }
 ```
@@ -138,7 +138,7 @@ int main(void)
 #define LEDS (LED1 | LED2)
 #define BTN BIT3
 
-void pisca_leds (void)
+void pisca (void)
 {
 	P1OUT ^= LEDS;
 	P1OUT ^= LEDS;
@@ -154,8 +154,8 @@ int main(void)
 	
 	while(1)
 	{	while((P1IN & BTN) != 0) {};
-		pisca_leds(); // Chama a função e pisca os LEDS (toggle)
-		pisca_leds(); // Chama a função e pisca os LEDS (toggle)
+		pisca(); // Chama a função e pisca os LEDS (toggle)
+		pisca(); // Chama a função e pisca os LEDS (toggle)
 		while((P1IN & BTN) == 0) {};
 	};
 	return 0;
