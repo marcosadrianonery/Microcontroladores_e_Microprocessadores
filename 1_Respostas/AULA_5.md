@@ -66,10 +66,10 @@ else f = g-h-10;
 	cmp R8, R7
 	jge ELSE ;SE R7 >= R8, VAI PARA ELSE
 	add.w R6, R4
-	add.w #10,R4
+	add.w #A,R4
 	ELSE:
 	sub.w R6, R4
-	sub.w #10,R4
+	sub.w #A,R4
 	FIM:
 ```
 3. "Traduza" o seguinte trecho de código em C para o assembly do MSP430:
