@@ -11,12 +11,12 @@ Utilize os registradores R11, R12, R13, R14 e R15 para armazenar valores tempor√
 	(a) Somente setar o bit menos significativo de R5.
 	```C 
 	mov.w #1, R4
-	bis R4, R5
+	bis.w R4, R5
 	```
 	(b) Somente setar dois bits de R6: o menos significativo e o segundo menos significativo.
 	```C 
 	mov.w #3, R4
-	bis R4, R6
+	bis.w R4, R6
 	```
 	(c) Somente zerar o terceiro bit menos significativo de R7.
 	```C 
@@ -38,7 +38,7 @@ Utilize os registradores R11, R12, R13, R14 e R15 para armazenar valores tempor√
 	cmp R5, R9
 	jeq FIM
 	mov.w #8000, R4
-	bis R4, R9
+	bis.w R4, R9
 	FIM
 	```	
 	(f) Inverter o nibble mais significativo de R10, e setar o nibble menos significativo de R10. 
@@ -49,10 +49,10 @@ Utilize os registradores R11, R12, R13, R14 e R15 para armazenar valores tempor√
 	cmp R5, R9
 	jeq FIM
 	mov.w #F000, R4
-	bis R4, R9
+	bis.w R4, R9
 	FIM
 	mov.w #000F, R4
-	bis R4, R9
+	bis.w R4, R9
 	```
 2. "Traduza" o seguinte trecho de c√≥digo em C para o assembly do MSP430:
 
@@ -76,10 +76,32 @@ else f = g-h-10;
 
 ```C
 while(save[i]!=k) i++;
-
-
 ```
 
+`	
+save: R4	
+i: R5	
+k: R6
+temporaria: R7
+`
+
+
+```C
+	while:
+	mov.w R4, R7 ; move o indece 'i' para uma variavel temporaria
+	rla R7 ; i = i*2
+	addacrescenta 
+	
+	
+	
+	jge ELSE ;SE R7 >= R8, VAI PARA ELSE
+	add.w R6, R4
+	add.w #A,R4
+	ELSE:
+	sub.w R6, R4
+	sub.w #A,R4
+	FIM:
+```
 4. "Traduza" o seguinte trecho de c√≥digo em C para o assembly do MSP430:
 
 ```C
