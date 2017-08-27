@@ -60,7 +60,7 @@ Utilize os registradores R11, R12, R13, R14 e R15 para armazenar valores tempor√
 if(i>j) f = g+h+10;
 else f = g-h-10;
 ```
-	```C
+```C
 	IF:
 	mov.w R5, R4
 	cmp R8, R7
@@ -71,7 +71,7 @@ else f = g-h-10;
 	sub.w R6, R4
 	sub.w #10,R4
 	FIM:
-	```
+```
 3. "Traduza" o seguinte trecho de c√≥digo em C para o assembly do MSP430:
 
 ```C
