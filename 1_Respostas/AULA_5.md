@@ -78,29 +78,21 @@ else f = g-h-10;
 while(save[i]!=k) i++;
 ```
 
-`	
-save: R4	
-i: R5	
-k: R6
-temporaria: R7
-`
+```
+; i = R7
+;k = R11
+;save = R13
 
+loop:
+mov.w R7, R12	
+rla R12		
+add.w R13, R12	
+cmp 0(R12), R11
+jne end
+inc.w R7	
+jmp loop
+end:
 
-```C
-	while:
-	mov.w R4, R7 ; move o indece 'i' para uma variavel temporaria
-	rla R7 ; i = i*2
-	addacrescenta 
-	
-	
-	
-	jge ELSE ;SE R7 >= R8, VAI PARA ELSE
-	add.w R6, R4
-	add.w #A,R4
-	ELSE:
-	sub.w R6, R4
-	sub.w #A,R4
-	FIM:
 ```
 4. "Traduza" o seguinte trecho de código em C para o assembly do MSP430:
 
@@ -108,8 +100,42 @@ temporaria: R7
 for(i=0; i<100; i++) A[i] = i*2;
 ```
 
+```
+; i = R7, A = R9
+mov.w #100, R11	
+mov.w #0, R7	
+loop:
+mov.w R7, R12	
+rla R12		
+mov.w R12, R13	
+add.w R9, R12	
+cmp R7, R11
+jge end
+mov.w R13, 0(R12)
+inc.w R7
+jmp loop
+end:
+```
+
 5. "Traduza" o seguinte trecho de código em C para o assembly do MSP430:
 
 ```C
 for(i=99; i>=0; i--) A[i] = i*2;
+```
+
+
+```
+; i = R7, A = R9
+mov.w #99, R7	
+loop:
+mov.w R7, R12	
+rla R12		
+mov.w R12, R13	
+add.w R9, R12	
+cmp R7, #0
+jl end
+mov.w R13, 0(R12)
+dec.w R7
+jmp loop
+end:
 ```
