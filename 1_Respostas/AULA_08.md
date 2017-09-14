@@ -60,6 +60,7 @@
                 while((i = i - 2) != 0x0000)
             }  else while(i-- != 0);
         }
+        return 0;
     }
 
 
@@ -71,6 +72,52 @@
 
 *****
 3. Escreva um código em C que acende os LEDs quando o botão é pressionado.
+
+```c
+    #include <msp430.h>
+    #define LED1 BIT0
+    #define LED2 BIT6
+    #define LEDS (LED1|LED2)
+    #define BTN BIT3
+
+        int main (void)
+        {
+            // PARAR WATCHDOG TIMER
+            WDTCTL = WDTPW|WDTHOLD;
+            // DEFINIR COMO SAIDA OS BITS 1 E 6, QUE SÃO OS LEDS
+            P1DIR |= LEDS;
+            /* DEFINIR COMO ENTRADA OS BIT3, DO BOTÃO
+            AQUI PRIMEIRO NEGA O NUMERO, SE TINHAMOS (00001000), PASSAMOS A TER
+            (11110111), ASSIM PELA AND O UNICO NUMERO RESETADO SERA O QUE QUEREMOS
+            COMO SAIDA, O CORRESPENDENTE AO BOTÃO;*/
+            P1DIR &= ~BTN;
+            // Configurar pull-up e pull-down
+	        P1REN |= BTN;
+            // Escolher pull-down
+        	P1OUT |= BTN;
+            // Começar desligado, estrutura para reset os bits: P1OUT &= ~LEDS;
+	        P1OUT &= ~LEDS;
+            // ESTRUTURA DE REPETIÇÃO, PARA TER O LAÇO        
+            while (1)
+            {
+                // QUANDO O BOTÃO É PRESSIONADO A ENTRADA É ZERO, ASSIM SE FOR PRESSIONADO SERÁ 
+                //DIFERENTE
+                if ((P1IN & BTN) == 0)
+                {               
+                P1OUT |= LEDS;
+                } else P1OUT &= ~LEDS; //SENÃO, APAGA OS LEDS
+            return 0;
+            }
+            
+        
+        
+        
+        return 0;
+        }
+
+
+
+```
 *****
 4. Escreva um código em C que pisca os LEDs ininterruptamente somente se o botão for pressionado.
 *****
