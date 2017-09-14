@@ -61,26 +61,22 @@
             }  else while(i-- != 0);
         }
         return 0;
-    }
-
-
-        
+    }     
 ```
-
 3. Escreva um código em C que acende os LEDs quando o botão é pressionado.
 
 ```C
 #include <msp430.h>
 #define LED1 BIT0
 #define LED2 BIT6
-#define LEDS (LED1|LED2)
+#define LEDS (LED1 | LED2)
 #define BTN BIT3
 
 int main(void)
 {
 // PARAR WATCHDOG TIMER
 	WDTCTL = WDTPW|WDTHOLD;
-// DEFINIR COMO SAIDA OS BITS 1 E 6, QUE SÃO OS LEDS
+// DEFINIR COMO SAIDA OS BITS 1 E 6 QUE SÃO OS LEDS
 	P1DIR |= LEDS;
 	P1DIR &= ~BTN;
 // Configurar pull-up e pull-down
@@ -94,7 +90,7 @@ int main(void)
 	{
 		if ((P1IN & BTN) == 0)
 		{               
-	P1OUT |= LEDS;
+		P1OUT |= LEDS;
 		}
 		else 
 		{
@@ -103,12 +99,7 @@ int main(void)
 	}
 return 0;
 }
-
-
-
 ```
-
 4. Escreva um código em C que pisca os LEDs ininterruptamente somente se o botão for pressionado.
-*****
+
 5. Escreva um código em C que acende os LEDs quando o botão é pressionado. Deixe o MSP430 em modo de baixo consumo, e habilite a interrupção do botão.
-*****
