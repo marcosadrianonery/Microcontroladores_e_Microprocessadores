@@ -66,17 +66,12 @@
 
         
 ```
-       
-
-
-
 *****
-
-
 3. Escreva um código em C que acende os LEDs quando o botão é pressionado.
 
 
-```c
+```C
+   
     #include <msp430.h>
     #define LED1 BIT0
     #define LED2 BIT6
@@ -111,7 +106,6 @@
                 } else P1OUT &= ~LEDS; //SENÃO, APAGA OS LEDS
             return 0;
             }
-
 ```
 
 *****
