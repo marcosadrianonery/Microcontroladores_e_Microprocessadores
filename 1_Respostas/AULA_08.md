@@ -69,10 +69,7 @@
 
 3. Escreva um código em C que acende os LEDs quando o botão é pressionado.
 
-	```C
-	
-BTN;
-
+```C
 #include <msp430.h>
 #define LED1 BIT0
 #define LED2 BIT6
@@ -90,13 +87,11 @@ int main(void)
 	P1REN |= BTN;
 // Escolher pull-down
 	P1OUT |= BTN;
-// Começar desligado, estrutura para reset os bits: P1OUT &= ~LEDS;
+// Começar desligado, estrutura para reset os bits
 	P1OUT &= ~LEDS;
-	// ESTRUTURA DE REPETIÇÃO, PARA TER O LAÇO        
+       
 	while (1)
 	{
-	// QUANDO O BOTÃO É PRESSIONADO A ENTRADA É ZERO, ASSIM SE FOR PRESSIONADO SERÁ 
-	//DIFERENTE
 		if ((P1IN & BTN) == 0)
 		{               
 	P1OUT |= LEDS;
@@ -104,52 +99,14 @@ int main(void)
 		else 
 		{
 		P1OUT &= ~LEDS;
-		} //SENÃO, APAGA OS LEDS
+		}
 	}
 return 0;
 }
 
-```		
 
-```C
-82	BTN;
-83	/*
-84	* Acender os LEDs quando botão é pressionado e desligar quando o botão é solto.
-85	*/
-86	
-87	#include <msp430.h>
-88	
-89	#define LED1 BIT0
-90	#define LED2 BIT6
-91	#define LEDS (LED1 | LED2)
-92	#define BTN BIT3
-93	
-94	int main(void)
-95	{
-96	// Parar o watchdog timer
-97		WDTCTL = WDTPW | WDTHOLD;
-98	// Configurar os LEDs como saída
-99		P1DIR |= LEDS;
-100	// Setar o BTN 3 como entrada (0)
-101		P1DIR &= ~BTN;
-102	// Configurar pull-up e pull-down
-103		P1REN |= BTN;
-104	// Escolher pull-down
-105		P1OUT |= BTN;
-106	// Começar desligado
-107		P1OUT &= ~LEDS;
-108	
-109		while(1){
-110		if((P1IN & BTN) == 0)
-111	// Acender os LEDs
-112			P1OUT |= LEDS;
-113		else
-114	// Desligar LEDs ao soltar
-115			P1OUT &= ~LEDS;
-116		}
-117		return 0;
-118	}
-119	```
+
+```
 
 4. Escreva um código em C que pisca os LEDs ininterruptamente somente se o botão for pressionado.
 *****
