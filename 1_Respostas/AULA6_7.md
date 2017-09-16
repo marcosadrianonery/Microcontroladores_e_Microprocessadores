@@ -36,7 +36,7 @@ unsigned int Raiz_Quadrada(unsigned int S);
 ```C
 int Potencia(int x, int N);
 ```
-´´´C
+```C
 int Potencia(int x, int N)
 {
 	unsigned int saida, i;
