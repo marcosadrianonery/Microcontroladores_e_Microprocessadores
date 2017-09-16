@@ -90,7 +90,48 @@ O protótipo da função é:
 unsigned long long DuploFatorial(unsigned long long n);
 ```
 
+´´´C
+unsigned long long DuploFatorial(unsigned long long n)
+{
+	unsigned int i, paridade = 0;
+	unsigned long long resultado = 1;
+	if (n%2 == 0) //TESTAR SE É PAR
+	{
+		paridade = 2; // PAR
+	} else paridade = 1; // IMPAR
+	for (i = paridade ; i <= n ; i = i+2)
+	{
+		resultado = resultado * i;
+		
+	}		
+	return resultado;
+}
+```
+
 7. (a) Escreva uma função em C que calcula a função exponencial utilizando a série de Taylor da mesma. Considere o cálculo até o termo n = 20. O protótipo da função é `double ExpTaylor(double x);`
+
+```C
+double ExpTaylor(double x)
+{
+	unsigned int i, n;
+	double resultado = 0, numerador = 1, denominador = 1;
+	if(x==0) return 0;
+	for (i=0 ; i < 20; i++)
+	{
+			denominador = 1;
+			numerador = 1;
+		    for (n=1; n <= i; n++)
+	{	
+		numerador = numerador * x;
+		denominador = denominador * n;
+	}
+		resultado = resultado + (numerador/denominador);
+	}
+	return resultado;
+}
+```
+
+
 (b) Escreva a sub-rotina equivalente na linguagem Assembly do MSP430, mas considere que os valores de entrada e de saída são inteiros de 16 bits. A variável de entrada é fornecida pelo registrador R15, e o valor de saída também.
 
 8. Escreva uma sub-rotina na linguagem Assembly do MSP430 que indica se um vetor esta ordenado de forma decrescente. Por exemplo:
@@ -107,6 +148,22 @@ Se o vetor for palíndromo, retorne o valor 1. Caso contrário, retorne o valor 
 
 ```C
 int Palindromo(int vetor[ ], int tamanho);
+```
+
+```C
+int Palindromo(int vetor[ ], int tamanho)
+{
+	unsigned int i, n;
+
+	for (i=0 ; i <= (tamanho/2); i++)
+	{
+			if (vetor[i] != vetor[tamanho - i -1])
+			{
+				return 0;			
+			}	
+	}
+	return 1;
+}
 ```
 
 (b) Escreva a sub-rotina equivalente na linguagem Assembly do MSP430. O endereço do vetor de entrada é dado pelo registrador R15, o tamanho do vetor é dado pelo registrador R14, e o resultado é dado pelo registrador R15.
