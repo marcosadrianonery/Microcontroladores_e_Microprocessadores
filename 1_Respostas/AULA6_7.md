@@ -90,7 +90,7 @@ O protótipo da função é:
 unsigned long long DuploFatorial(unsigned long long n);
 ```
 
-´´´C
+```C
 unsigned long long DuploFatorial(unsigned long long n)
 {
 	unsigned int i, paridade = 0;
