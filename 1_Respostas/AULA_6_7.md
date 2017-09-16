@@ -122,8 +122,6 @@ POT_FIM:
 
 3. Escreva uma sub-rotina na linguagem Assembly do MSP430 que calcula a divisão de `a` por `b`, onde `a`, `b` e o valor de saída são inteiros de 16 bits. `a` e `b` são fornecidos através dos registradores R15 e R14, respectivamente, e a saída deverá ser fornecida através do registrador R15.
 
-´´´C
-
 #include "msp430.h"                     ; #define controlled include file
 
         NAME    main                    ; module name
@@ -165,7 +163,7 @@ DIV_LACO:
         MOV R13, R15
         RET
         END
-```	
+
 4. Escreva uma sub-rotina na linguagem Assembly do MSP430 que calcula o resto da divisão de `a` por `b`, onde `a`, `b` e o valor de saída são inteiros de 16 bits. `a` e `b` são fornecidos através dos registradores R15 e R14, respectivamente, e a saída deverá ser fornecida através do registrador R15.
 
 ```C
