@@ -139,8 +139,8 @@ init:   MOV     #SFE(CSTACK), SP        ; set up stack
 
 main:   NOP                             ; main program
         MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
-        MOV.W   #999, R15                  ;ENTRA O VALOR 2 EM R15
-        MOV.W   #3, R14                  ;ENTRA O VALOR 2 EM R14
+        MOV.W   #999, R15               ;ENTRA O VALOR DE a EM R15
+        MOV.W   #3, R14                 ;ENTRA O VALOR DE b EM R14
         CALL    #DIVISAO               ;CHAMA A FUNCAO
    
         JMP $                           ; jump to current location '$'
@@ -167,6 +167,51 @@ DIV_LACO:
 	
 ´´´
 4. Escreva uma sub-rotina na linguagem Assembly do MSP430 que calcula o resto da divisão de `a` por `b`, onde `a`, `b` e o valor de saída são inteiros de 16 bits. `a` e `b` são fornecidos através dos registradores R15 e R14, respectivamente, e a saída deverá ser fornecida através do registrador R15.
+
+```C
+
+#include "msp430.h"                     ; #define controlled include file
+
+        NAME    main                    ; module name
+
+        PUBLIC  main                    ; make the main label vissible
+                                        ; outside this module
+        ORG     0FFFEh
+        DC16    init                    ; set reset vector to 'init' label
+
+        RSEG    CSTACK                  ; pre-declaration of segment
+        RSEG    CODE                    ; place program in 'CODE' segment
+
+init:   MOV     #SFE(CSTACK), SP        ; set up stack
+
+main:   NOP                             ; main program
+        MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
+        MOV.W   #100, R15               ;ENTRA O VALOR DE a EM R15
+        MOV.W   #3, R14                 ;ENTRA O VALOR DE b EM R14
+        CALL    #DIVISAO               ;CHAMA A FUNCAO
+   
+        JMP $                           ; jump to current location '$'
+                                        ; (endless loop)
+
+;===============================================================================
+;          RESTO
+;=============================================================================== 
+      
+DIVISAO:                                    ; FUNÇAO
+        TST.W R14                          ;R14==0?
+        CLR.W R13
+        JNZ DIV_LACO
+        CLR R15
+        RET                               
+DIV_LACO:
+        SUB.W R14, R15                    ;GUARDA R15 NA PILHA
+        INC.W R13
+        CMP.W R14,R15                     ; 
+        JGE DIV_LACO                      ; SE R15 >= R14 pula
+        RET
+        END
+	
+´´´
 
 5. (a) Escreva uma função em C que indica a primalidade de uma variável inteira sem sinal, retornando o valor 1 se o número for primo, e 0, caso contrário. Siga o seguinte protótipo:
 
