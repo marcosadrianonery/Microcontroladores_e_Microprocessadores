@@ -50,6 +50,75 @@ int Potencia(int x, int N)
 ```
 
 (b) Escreva a sub-rotina equivalente na linguagem Assembly do MSP430. `x` e `n` são fornecidos através dos registradores R15 e R14, respectivamente, e a saída deverá ser fornecida no registrador R15.
+```C
+#include "msp430.h"                     ; #define controlled include file
+
+        NAME    main                    ; module name
+
+        PUBLIC  main                    ; make the main label vissible
+                                        ; outside this module
+        ORG     0FFFEh
+        DC16    init                    ; set reset vector to 'init' label
+
+        RSEG    CSTACK                  ; pre-declaration of segment
+        RSEG    CODE                    ; place program in 'CODE' segment
+
+init:   MOV     #SFE(CSTACK), SP        ; set up stack
+
+main:   NOP                             ; main program
+        MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
+        MOV.W   #21, R15                  ;ENTRA O VALOR 2 EM R15
+        MOV.W   #1, R14                  ;ENTRA O VALOR 2 EM R14
+        CALL    #POTENCIA                ;CHAMA A FUNCAO
+   
+        JMP $                           ; jump to current location '$'
+                                        ; (endless loop)
+
+;===============================================================================
+;          MULTIPLICAÇÃO 
+;=============================================================================== 
+      
+MULT:                                    ; FUNÇAO
+        TST.W R13                          ;R14==0?
+        JNZ MULT_LACO
+        CLR R15
+        RET                               
+MULT_LACO:
+        PUSH.W R15                         ;GUARDA R15 NA PILHA
+        DEC.W R13                         ;GUARDA R14 NA PILHA
+        CALL #MULT
+        POP.W R13                          ; JOGA O VALOR DA PILHA EM R14
+        ADD.W R13,R15
+        RET
+;===============================================================================
+;            POTENCIA
+;===============================================================================
+
+POTENCIA:                               ; FUNÇAO
+        MOV.W R15, R12
+        TST.W R14                          ;R14==0?
+        JZ VALOR_SALVO
+
+        DEC.W R14                       ; O primeiro termo e equivalente a 2
+        JZ POT_FIM                      ; Se expoente é 1, a saida é a base
+VALOR_SALVO:
+        MOV.W R12, R13                      ;Na função de mult, o valor foi
+                                            ;mudado agora resgatamos o valor
+                                            ;de base
+        TST.W R14                          ;R14==0?
+        JNZ POT_DIF_0
+        CLR R15
+        BIS.W #0X0001, R15
+        RET 
+POT_DIF_0:
+        DEC.W R14
+        CALL #MULT                           ;VOLTA VALOR DE R14
+        TST.W R14
+        JNZ VALOR_SALVO
+POT_FIM:     
+        RET
+        END
+```
 
 3. Escreva uma sub-rotina na linguagem Assembly do MSP430 que calcula a divisão de `a` por `b`, onde `a`, `b` e o valor de saída são inteiros de 16 bits. `a` e `b` são fornecidos através dos registradores R15 e R14, respectivamente, e a saída deverá ser fornecida através do registrador R15.
 
