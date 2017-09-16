@@ -152,8 +152,8 @@ main:   NOP                             ; main program
 ;=============================================================================== 
       
 DIVISAO:                                    ; FUNÇAO
-        TST.W R14                          ;R14==0?
         CLR.W R13
+	TST.W R14                          ;R14==0?
         JNZ DIV_LACO
         CLR R15
         RET                               
