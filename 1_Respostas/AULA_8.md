@@ -67,6 +67,7 @@ int main(void)
      
 ```
 
+*****
 3. Escreva um código em C que acende os LEDs quando o botão é pressionado.
 ```
 ```C
@@ -103,6 +104,7 @@ int main(void)
 return 0;
 }
 ```
+*****
 4. Escreva um código em C que pisca os LEDs ininterruptamente somente se o botão for pressionado.
 
 ```C
@@ -142,5 +144,42 @@ int main(void)
 
 }
 ```
-
+*****
 5. Escreva um código em C que acende os LEDs quando o botão é pressionado. Deixe o MSP430 em modo de baixo consumo, e habilite a interrupção do botão.
+
+```C
+#include <msp430g2553.h>
+#define LED1 BIT0
+#define LED2 BIT6
+#define LEDS (LED1|LED2)
+#define BTN BIT3
+
+void main(void)
+{
+	WDTCTL = WDTPW|WDTHOLD;
+	P1DIR |= LEDS;		// HABILITA BOTÃO COMO ENTRADA
+	P1REN |= BTN;		// HABILITA BTN, PULL
+	//P1OUT |= BTN;		//PULL UP
+	P1OUT |= LEDS;		//SET LEDS
+	P1IE  |= BTN;		// HABILITA INTERRUPÇÃO NO BTN
+	P1IES |= BTN;		// HABILITA INTERRUPÇÃO NA BORDA
+						//DE DESCIDA, POR CONTA DE SER
+						//PULL UP, ESTANDO EM 1, PRIMEIRO
+	P1IFG  &= ~BTN;		//LIMPA FLAG DE IFG,
+						// SEM INTERRUPÇÕESN PENDENTES
+
+	_BIS_SR(GIE);	 // Habilita interrupções com mspgcc
+
+	_BIS_SR(LPM4_bits);// Colocar no modo de mais baixo consumo
+
+	while(1);     // Loop infinito, ATÉ IMTERRUPÇÃO
+
+}
+#pragma vector=PORT1_VECTOR
+__interrupt void Port_1(void) {
+	P1OUT ^= LEDS; // P1.0 = toggle
+	 P1IFG &= ~BTN; // P1.3 IFG cleared
+}
+
+```
+*****
