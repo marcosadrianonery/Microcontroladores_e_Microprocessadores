@@ -241,6 +241,78 @@ int Primalidade(unsigned int x)
 
 (b) Escreva a sub-rotina equivalente na linguagem Assembly do MSP430. A variável de entrada é fornecida pelo registrador R15, e o valor de saída também.
 
+```
+#include "msp430.h"                     ; #define controlled include file
+
+        NAME    main                    ; module name
+
+        PUBLIC  main                    ; make the main label vissible
+                                        ; outside this module
+        ORG     0FFFEh
+        DC16    init                    ; set reset vector to 'init' label
+
+        RSEG    CSTACK                  ; pre-declaration of segment
+        RSEG    CODE                    ; place program in 'CODE' segment
+
+init:   MOV     #SFE(CSTACK), SP        ; set up stack
+
+main:   NOP                             ; main program
+        MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
+        MOV.W   #17, R15                  ;ENTRA O VALOR 2 EM R15
+        CALL    #PRIMALIDADE_INICIAL                ;CHAMA A FUNCAO
+   
+        JMP $                           ; jump to current location '$'
+                                        ; (endless loop)
+
+;===============================================================================
+;          RESTO
+;=============================================================================== 
+      
+RESTO:                                    ; FUNÇAO
+        CLR.W R13                          ; AUXILIAR
+        TST.W R14                          ;R14==0?
+        JNZ DIV_LACO
+        CLR R15
+        RET                               
+DIV_LACO:
+        SUB.W R14, R12                    ;GUARDA R15 NA PILHA
+        INC.W R13
+        CMP.W R14,R12                     ; 
+        JGE DIV_LACO                      ; SE R15 >= R14 pula
+        RET
+;===============================================================================
+;            PRIMALIDADE
+;===============================================================================
+
+PRIMALIDADE_INICIAL:                               ; FUNÇAO
+          MOV.W R15, R12
+          MOV.W R15, R14
+
+PRIMALIDADE: 
+         DEC.W R14
+         CMP.W #2, R14             ;SE R14 É MENOR
+         JL PRIMO                  ; QUE 2 PULA PARA PRIMO
+         CALL #AUXILIAR             ; VARIAVEL AUXILIAR
+         TST.W R12                  
+         JZ NAO_PRIMO               ;SE RESTO == O, NÃO É PRIMO
+         CALL #PRIMALIDADE
+AUXILIAR:
+          MOV.W R15, R12            ; O VALOR DE R12, TEM DE SER
+                                    ; ATUALIZADO
+          JMP RESTO                 ; 
+
+PRIMO:    
+         MOV #1, R15
+         JMP PRIMALIDADE_FIM        ; PRIMO
+NAO_PRIMO:    
+         MOV #0, R15         
+         JMP PRIMALIDADE_FIM        ; NAO_PRIMO
+PRIMALIDADE_FIM:
+          RET
+         END
+```
+
+
 6. Escreva uma função em C que calcula o duplo fatorial de n, representado por n!!. Se n for ímpar, n!! = 1*3*5*...*n, e se n for par, n!! = 2*4*6*...*n. Por exemplo, 9!! = 1*3*5*7*9 = 945 e 10!! = 2*4*6*8*10 = 3840. Além disso, 0!! = 1!! = 1.
 O protótipo da função é:
 
