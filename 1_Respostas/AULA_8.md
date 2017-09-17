@@ -70,7 +70,7 @@
 #define LED1 BIT0
 ```C
 #define LED2 BIT6
-#define LEDS (LED1 | LED2)
+#define LEDS(LED1|LED2)
 #define BTN BIT3
 ```
 ```C
