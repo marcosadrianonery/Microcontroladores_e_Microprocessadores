@@ -65,7 +65,6 @@
 ```
 3. Escreva um código em C que acende os LEDs quando o botão é pressionado.
 
-```C
 #include <msp430.h>
 #define LED1 BIT0
 #define LED2 BIT6
@@ -99,7 +98,7 @@ int main(void)
 	}
 return 0;
 }
-```
+
 4. Escreva um código em C que pisca os LEDs ininterruptamente somente se o botão for pressionado.
 
 5. Escreva um código em C que acende os LEDs quando o botão é pressionado. Deixe o MSP430 em modo de baixo consumo, e habilite a interrupção do botão.
