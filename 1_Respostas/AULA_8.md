@@ -113,12 +113,6 @@ return 0;
 #define LEDS (LED1|LED2)
 #define BTN BIT3
 
-void atraso(volatile unsigned int n)
-{
-	while(n--);
-}
-
-
 int main(void)
 {
 	WDTCTL = WDTPW|WDTHOLD;  //parar wdtctl--watchdog timer
@@ -130,6 +124,7 @@ int main(void)
 							// DO BOTÃO
 	// Começar desligado, estrutura para reset os bits
 	P1OUT &= ~LEDS;
+	int n;
 
 
 	while(1)
@@ -138,9 +133,9 @@ int main(void)
 		{
 
 					P1OUT |= LEDS;  //acende
-					delay(0xFFFF);
+	        		for ( n = 0; n < 0XFFFF; n++);
 					P1OUT ^= LEDS;	//apaga
-					delay(0xFFFF);
+	        		for ( n = 0; n < 0XFFFF; n++);
 		}
 	}
 	return 0;
