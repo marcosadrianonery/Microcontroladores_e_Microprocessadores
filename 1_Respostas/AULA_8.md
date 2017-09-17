@@ -100,6 +100,7 @@ int main(void)
 	}
 return 0;
 }
+```
 
 ```
 4. Escreva um código em C que pisca os LEDs ininterruptamente somente se o botão for pressionado.
