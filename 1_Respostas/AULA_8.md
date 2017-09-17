@@ -65,14 +65,14 @@
 ```
 
 3. Escreva um código em C que acende os LEDs quando o botão é pressionado.
-
 ```C
 #include <msp430.h>
 #define LED1 BIT0
 #define LED2 BIT6
 #define LEDS (LED1 | LED2)
 #define BTN BIT3
-
+```
+```C
 int main(void)
 {
 // PARAR WATCHDOG TIMER
@@ -100,8 +100,6 @@ int main(void)
 	}
 return 0;
 }
-```
-
 ```
 4. Escreva um código em C que pisca os LEDs ininterruptamente somente se o botão for pressionado.
 
