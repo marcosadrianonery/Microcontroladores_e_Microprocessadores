@@ -63,7 +63,9 @@
         return 0;
     }     
 ```
+
 3. Escreva um código em C que acende os LEDs quando o botão é pressionado.
+
 ```C
 #include <msp430.h>
 #define LED1 BIT0
@@ -98,6 +100,7 @@ int main(void)
 	}
 return 0;
 }
+
 ```
 4. Escreva um código em C que pisca os LEDs ininterruptamente somente se o botão for pressionado.
 
