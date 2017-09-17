@@ -8,31 +8,35 @@
 
     ```C
 
-    /*Piscar leds ininterrptamente.*/
-    #include <msp430.h> // inclusão da biblioteca, para acessar funções do msp
-    #define led1 bit0
-    #define led2 bit6
-    #define leds(led1|led2)
-    
-    int main(void)
+/*Piscar leds ininterrptamente.*/
+#include <msp430.h> // inclusão da biblioteca, para acessar funções do msp
+#include <msp430g2553.h>
+#define led1 BIT0
+#define led2 BIT6
+#define leds (led1|led2)
+
+void delay(volatile unsigned int n)
+{
+	while(n--);
+}
+
+int main(void)
     {
         //PARA PARAR O WHATCHDOG TIMER
         WDTCTL = WDTPW | WDTHOLD;
         //DEFINIR UMA VARIAVEL, TIPO INTEIRO PARA AUXILIO
-        P1DIR = leds;
-        volatile int i;    
-        while(1)
-        {
-          //UM VALOR PARA DECREMENTAR E DEFINIR QUANTO DEVE ESTAR ACESSO/APAGADO
-            i = 0xFFFF;
-            P1OUT ^= LEDS;
-         // ENQUANTO 'n' DIFERENTE DE '0'.     
-            while (n!=0)
-            {
-            n--;
-            }
-        }
+        P1DIR |= leds;
+        P1OUT &= ~leds;
+        volatile int i;
+        	while(1)
+        	{
+        		P1OUT ^= leds;
+        		// ENQUANTO 'n' DIFERENTE DE '0'.
+        		delay (0xFFFF);
+
+        	}
     }
+
     
     ```
 *****
@@ -42,26 +46,27 @@
     #include <msp430.h>
     #define led1 BIT0
     #define led2 BIT6
-    #define leds(led1|led2)
-  
+    #define leds (led1|led2)
+
     // FUNÇÃO PRINCIPAL
     int main (void)
     {
         WDTCTL = WDTPW | WDTHOLD; // PARA O WATCHDOG TIMER
         volatile int i; // VARIAVEL AUXILIAR
         P1DIR |= leds;
-        
+
         while(1)
         {
             i = 0XFFFF;
-            PIOUT ^= leds;       
+            P1OUT ^= leds;
             if (P1OUT == 0X0000)
             {
-                while((i = i - 2) != 0x0000)
+                while((i = i - 2) != 0x0000);
             }  else while(i-- != 0);
         }
         return 0;
-    }     
+    }
+     
 ```
 
 3. Escreva um código em C que acende os LEDs quando o botão é pressionado.
@@ -70,7 +75,7 @@
 #include <msp430.h>
 #define LED1 BIT0
 #define LED2 BIT6
-#define LEDS(LED1|LED2)
+#define LEDS (LED1|LED2)
 #define BTN BIT3
 int main(void)
 {
@@ -85,14 +90,14 @@ int main(void)
 	P1OUT |= BTN;
 // Começar desligado, estrutura para reset os bits
 	P1OUT &= ~LEDS;
-       
+
 	while (1)
 	{
 		if ((P1IN & BTN) == 0)
-		{               
+		{
 		P1OUT |= LEDS;
 		}
-		else 
+		else
 		{
 		P1OUT &= ~LEDS;
 		}
