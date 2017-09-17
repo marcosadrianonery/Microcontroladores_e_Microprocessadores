@@ -435,6 +435,134 @@ double ExpTaylor(double x)
 }
 ```
 
+EM ASSEMBY/// TERMINAR
+
+```
+
+#include "msp430.h"                     ; #define controlled include file
+
+        NAME    main                    ; module name
+
+        PUBLIC  main                    ; make the main label vissible
+                                        ; outside this module
+        ORG     0FFFEh
+        DC16    init                    ; set reset vector to 'init' label
+
+        RSEG    CSTACK                  ; pre-declaration of segment
+        RSEG    CODE                    ; place program in 'CODE' segment
+
+init:   MOV     #SFE(CSTACK), SP        ; set up stack
+
+main:   NOP                             ; main program
+        MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
+        MOV.W   #2, R15                  ;ENTRA O VALOR 2 EM R15
+        CALL    #TAYLOR                ;CHAMA A FUNCAO
+   
+        JMP $                           ; jump to current location '$'
+                                        ; (endless loop)
+
+;===============================================================================
+;          MULTIPLICAÇÃO 
+;=============================================================================== 
+      
+
+
+MULT:                                    ; FUNÇAO
+        TST.W R13                          ;R14==0?
+        JNZ MULT_LACO
+        CLR R15
+        RET                               
+
+
+MULT_LACO:
+        PUSH.W R15                         ;GUARDA R15 NA PILHA
+        DEC.W R13                         ;GUARDA R14 NA PILHA
+        CALL #MULT
+        POP.W R13                          ; JOGA O VALOR DA PILHA EM R14
+        ADD.W R13,R15
+        RET
+;===============================================================================
+;            POTENCIA
+;===============================================================================
+
+POTENCIA:                               ; FUNÇAO
+        MOV.W R15, R12
+        TST.W R14                          ;R14==0?
+        JZ VALOR_SALVO
+
+        DEC.W R14                       ; O primeiro termo e equivalente a 2
+        JZ POT_FIM                      ; Se expoente é 1, a saida é a base
+VALOR_SALVO:
+        MOV.W R12, R13                      ;Na função de mult, o valor foi
+                                            ;mudado agora resgatamos o valor
+                                            ;de base
+        TST.W R14                          ;R14==0?
+        JNZ POT_DIF_0
+        CLR R15
+        BIS.W #0X0001, R15
+        RET 
+POT_DIF_0:
+        DEC.W R14
+        CALL #MULT                           ;VOLTA VALOR DE R14
+        TST.W R14
+        JNZ VALOR_SALVO
+POT_FIM:     
+        RET
+;===============================================================================
+;          DIVISÃO
+;=============================================================================== 
+      
+DIVISAO:                                    ; FUNÇAO
+        CLR.W R13
+	TST.W R14                          ;R14==0?
+        JNZ DIV_LACO
+        CLR R15
+        RET                               
+DIV_LACO:
+        SUB.W R14, R15                    ;GUARDA R15 NA PILHA
+        INC.W R13
+        CMP.W R14,R15                     ; 
+        JGE DIV_LACO                      ; SE R15 >= R14 pula
+        MOV R13, R15
+        RET
+;===============================================================================
+;            TAYLOR
+;===============================================================================
+
+TAYLOR:
+        MOV.W #1, R14
+        MOV.W R15, R13
+        ; R13 DEFINE POR QUEM O FATORIA TEM DE MULTIPLICAR
+TAYLOR_0:        
+        PUSH.W R14
+        MOV R13, R15
+        CALL #POTENCIA          ;CHAMA POTENCIA E FAZ (R15)^R14
+        POP.W  R14
+        PUSH.W R14
+        PUSH.W 13
+        CALL #DENOMINADOR
+        POP.W 13
+        POP.W  R14
+        INC.W R14
+        CALL #SOMA
+        CMP.W #21, R14
+        JGE FIM
+        JMP TAYLOR_0   
+DENOMINADOR:
+        MOV R14, R13
+        CALL #MULT
+        DEC.W R13
+        TST.W R13
+        JNZ DENOMINADOR
+        RET
+SOMA: 
+        CALL #DIVISAO
+        ADD.W R15, R10
+FIM:        
+        RET
+        END
+	
+```
 
 (b) Escreva a sub-rotina equivalente na linguagem Assembly do MSP430, mas considere que os valores de entrada e de saída são inteiros de 16 bits. A variável de entrada é fornecida pelo registrador R15, e o valor de saída também.
 
