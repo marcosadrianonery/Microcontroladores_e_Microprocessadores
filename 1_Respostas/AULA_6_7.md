@@ -31,6 +31,80 @@ unsigned int Raiz_Quadrada(unsigned int S);
 
 (b) Escreva a sub-rotina equivalente na linguagem Assembly do MSP430. A variável `S` é fornecida pelo registrador R15, e a raiz quadrada de `S` (ou seja, a variável `x`) é fornecida pelo registrador R15 também.
 
+```
+#include "msp430.h"                     ; #define controlled include file
+
+        NAME    main                    ; module name
+
+        PUBLIC  main                    ; make the main label vissible
+                                        ; outside this module
+        ORG     0FFFEh
+        DC16    init                    ; set reset vector to 'init' label
+
+        RSEG    CSTACK                  ; pre-declaration of segment
+        RSEG    CODE                    ; place program in 'CODE' segment
+
+init:   MOV     #SFE(CSTACK), SP        ; set up stack
+
+main:   NOP                             ; main program
+        MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
+        MOV.W   #25, R15                  ;ENTRA O VALOR 2 EM R15
+        CALL    #RAIZ                   ;CHAMA A FUNCAO
+   
+        JMP $                           ; jump to current location '$'
+                                        ; (endless loop)
+
+;===============================================================================
+;          DIVISÃO
+;=============================================================================== 
+      
+DIVISAO:                                    ; FUNÇAO
+        CLR.W R13
+	TST.W R14                          ;R14==0?
+        JNZ DIV_LACO
+        CLR R15
+        RET                               
+DIV_LACO:
+        SUB.W R14, R15                    ;GUARDA R15 NA PILHA
+        INC.W R13
+        CMP.W R14,R15                     ; 
+        JGE DIV_LACO                      ; SE R15 >= R14 pula
+        MOV R13, R15
+        RET
+;===============================================================================
+;            RAIZ
+;===============================================================================
+
+RAIZ:
+        CLR.W R11
+        MOV.W R15, R14
+        MOV.W R15, R12                    ;VALOR DE ENTRADA SALVO EM R12 
+        CMP.W #1,R15                     ; 
+        JGE MAIOR_0                      ; SE R15 >= R14 pula
+        CLR.W R15
+MAIOR_0:
+        CALL #DIVISAO             ; s/s0
+        ADD.W R14,R15            ; SOMANDO S0-R14, COM S-R15: (s0 + s/s0)
+        RRA.W R15                ; DIVIDINDO POR 2: s1 = (s0 + s/s0)/2;
+        SUB.W R14,R15                     ; 
+        JZ RESULT_RAIZ                      ; SE R15 - R14 == 0, pula
+        ;INC.W R11
+        ;RRA.W R11
+        ;CMP.W #999,R11                     ; 
+        ;JGE RESULT_RAIZ                     ; SE R11 >= X pula
+        
+        ;SUB.W #999, R11
+        ;JZ RESULT_RAIZ
+        ADD.W R14, R15
+        MOV.W R15, R14
+        MOV.W R12, R15
+        CALL #MAIOR_0
+RESULT_RAIZ:
+        CLR.W R15
+        ADD.W R14,R15
+        RET
+        END
+```
 2. (a) Escreva uma função em C que calcule `x` elevado à `N`-ésima potência, seguindo o seguinte protótipo: 
 
 ```C
