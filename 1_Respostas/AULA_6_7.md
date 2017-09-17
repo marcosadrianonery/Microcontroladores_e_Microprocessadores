@@ -570,6 +570,61 @@ FIM:
 [5 4 3 2 1] e [90 23 20 10] estão ordenados de forma decrescente.
 [1 2 3 4 5] e [1 2 3 2] não estão.
 O primeiro endereço do vetor é fornecido pelo registrador R15, e o tamanho do vetor é fornecido pelo registrador R14. A saída deverá ser fornecida no registrador R15, valendo 1 quando o vetor estiver ordenado de forma decrescente, e valendo 0 em caso contrário.
+```
+#include "msp430.h"                     ; #define controlled include file
+
+        NAME    main                    ; module name
+
+        PUBLIC  main                    ; make the main label vissible
+                                        ; outside this module
+        ORG     0FFFEh
+        DC16    init                    ; set reset vector to 'init' label
+
+        RSEG    CSTACK                  ; pre-declaration of segment
+        RSEG    CODE                    ; place program in 'CODE' segment
+
+init:   MOV     #SFE(CSTACK), SP        ; set up stack
+
+main:   NOP                             ; main program
+        MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
+        MOV.W   #0x0A30, R15
+        MOV.W   #99, 0(R15)                  ;ENTRA O VALOR 2 EM R15
+        MOV.W   #20, 2(R15)                  ;ENTRA O VALOR 2 EM R15
+        MOV.W   #14, 4(R15)                  ;ENTRA O VALOR 2 EM R15
+        MOV.W   #9, 6(R15)                  ;ENTRA O VALOR 2 EM R15
+        MOV.W   #0, 8(R15)                  ;ENTRA O VALOR 2 EM R15
+        MOV.W   #10, R14                 ;TAMANHO IGUAL A QUANT. VEZES 2
+        CALL    #ORDENADO                ;CHAMA A FUNCAO
+   
+        JMP $                           ; jump to current location '$'
+                                        ; (endless loop)
+;===============================================================================
+;            ORDENADO
+;===============================================================================
+
+ORDENADO:
+        MOV.W #0, R13
+ORDENADO_0:
+        MOV.W 0(R15), R12
+        INCD.W R15 
+        INCD.W R13
+        MOV.W 0(R15), R11
+        CMP.W R14, R13
+        JGE DECRESCENTE
+        CMP.W R12, 0(R15)
+        JGE NAO_ESTA
+        JMP ORDENADO_0
+        
+DECRESCENTE: MOV.W #1, R15
+             JMP FIM
+NAO_ESTA:    MOV.W #0, R15
+             JMP FIM
+FIM:        
+        RET
+        END
+	
+```
+
 
 9. Escreva uma sub-rotina na linguagem Assembly do MSP430 que calcula o produto escalar de dois vetores, `a` e `b`. O primeiro endereço do vetor `a` deverá ser passado através do registrador R15, o primeiro endereço do vetor `b` deverá ser passado através do registrador R14, e o tamanho do vetor deverá ser passado pelo registrador R13. A saída deverá ser fornecida no registrador R15.
 
