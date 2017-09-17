@@ -733,3 +733,80 @@ int Palindromo(int vetor[ ], int tamanho)
 ```
 
 (b) Escreva a sub-rotina equivalente na linguagem Assembly do MSP430. O endereço do vetor de entrada é dado pelo registrador R15, o tamanho do vetor é dado pelo registrador R14, e o resultado é dado pelo registrador R15.
+```
+#include "msp430.h"                     ; #define controlled include file
+
+        NAME    main                    ; module name
+
+        PUBLIC  main                    ; make the main label vissible
+                                        ; outside this module
+        ORG     0FFFEh
+        DC16    init                    ; set reset vector to 'init' label
+
+        RSEG    CSTACK                  ; pre-declaration of segment
+        RSEG    CODE                    ; place program in 'CODE' segment
+
+init:   MOV     #SFE(CSTACK), SP        ; set up stack
+
+main:   NOP                             ; main program
+        MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
+        MOV.W   #0x0A30, R15
+        MOV.W   #2, 0(R15)                  ;ENTRA O VALOR 2 EM R15
+        MOV.W   #2, 2(R15)                  ;ENTRA O VALOR 2 EM R15
+        MOV.W   #2, 4(R15)                  ;ENTRA O VALOR 2 EM R15
+        MOV.W   #99, 6(R15)                  ;ENTRA O VALOR 2 EM R15        
+        MOV.W   #99, 8(R15)                  ;ENTRA O VALOR 2 EM R15
+        MOV.W   #2, 10(R15)                  ;ENTRA O VALOR 2 EM R15
+        MOV.W   #2, 12(R15)                  ;ENTRA O VALOR 2 EM R15
+        MOV.W   #2, 14(R15)                  ;ENTRA O VALOR 2 EM R15
+        
+        MOV.W   #16, R14
+        CALL    #PALINDROMO                ;CHAMA A FUNCAO
+   
+        JMP $                           ; jump to current location '$'
+                                        ; (endless loop)
+                                        
+                                        
+;===============================================================================
+;          MULTIPLICAÇÃO 
+;=============================================================================== 
+MULT:                                    ; FUNÇAO
+        TST.W R10                          ;R14==0?
+        JNZ MULT_LACO
+        CLR R11
+        RET                               
+MULT_LACO:
+        PUSH.W R11                         ;GUARDA R15 NA PILHA
+        DEC.W R10                         ;GUARDA R14 NA PILHA
+        CALL #MULT
+        POP.W R10                          ; JOGA O VALOR DA PILHA EM R14
+        ADD.W R10,R11
+        RET
+;===============================================================================
+;            PALINDROMO
+;===============================================================================
+PALINDROMO:
+          MOV.W R14, R13
+          ADD.W R15, R14
+          DECD.W R14
+          CMP.W 0(R14),0(R15)
+          JNZ NAO_PALINDROMO
+PALINDROMO_0:
+          CMP.W R14, R15
+          JGE E_PALINDROMO
+          INCD.W R15
+          DECD.W R14
+          CMP.W 0(R15),0(R14)
+          JZ PALINDROMO_0
+          JNZ NAO_PALINDROMO
+          
+NAO_PALINDROMO:
+          MOV.W #0, R15
+          JMP FIM
+E_PALINDROMO          
+          MOV.W #1, R15
+          JMP FIM
+FIM:
+          RET
+          END
+```            
