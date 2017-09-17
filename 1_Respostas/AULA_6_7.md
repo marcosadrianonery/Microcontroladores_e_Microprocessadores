@@ -628,6 +628,85 @@ FIM:
 
 9. Escreva uma sub-rotina na linguagem Assembly do MSP430 que calcula o produto escalar de dois vetores, `a` e `b`. O primeiro endereço do vetor `a` deverá ser passado através do registrador R15, o primeiro endereço do vetor `b` deverá ser passado através do registrador R14, e o tamanho do vetor deverá ser passado pelo registrador R13. A saída deverá ser fornecida no registrador R15.
 
+```
+
+#include "msp430.h"                     ; #define controlled include file
+
+        NAME    main                    ; module name
+
+        PUBLIC  main                    ; make the main label vissible
+                                        ; outside this module
+        ORG     0FFFEh
+        DC16    init                    ; set reset vector to 'init' label
+
+        RSEG    CSTACK                  ; pre-declaration of segment
+        RSEG    CODE                    ; place program in 'CODE' segment
+
+init:   MOV     #SFE(CSTACK), SP        ; set up stack
+
+main:   NOP                             ; main program
+        MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
+        MOV.W   #0x0A30, R15
+        MOV.W   #2, 0(R15)                  ;ENTRA O VALOR 2 EM R15
+        MOV.W   #2, 2(R15)                  ;ENTRA O VALOR 2 EM R15
+        MOV.W   #2, 4(R15)                  ;ENTRA O VALOR 2 EM R15
+        MOV.W   #3, 6(R15)                  ;ENTRA O VALOR 2 EM R15
+        MOV.W   #2, 8(R15)                  ;ENTRA O VALOR 2 EM R15
+        MOV.W   #0x0B30, R14
+        MOV.W   #2, 0(R14)                  ;ENTRA O VALOR 2 EM R14
+        MOV.W   #0, 2(R14)                  ;ENTRA O VALOR 2 EM R14
+        MOV.W   #0, 4(R14)                  ;ENTRA O VALOR 2 EM R14
+        MOV.W   #0, 6(R14)                  ;ENTRA O VALOR 2 EM R14
+        MOV.W   #1, 8(R14)                  ;ENTRA O VALOR 2 EM R14
+        MOV.W   #10, R13                 ;TAMANHO IGUAL A QUANT. VEZES 2
+        CALL    #PRODUTO                ;CHAMA A FUNCAO
+   
+        JMP $                           ; jump to current location '$'
+                                        ; (endless loop)
+                                        
+                                        
+;===============================================================================
+;          MULTIPLICAÇÃO 
+;=============================================================================== 
+MULT:                                    ; FUNÇAO
+        TST.W R10                          ;R14==0?
+        JNZ MULT_LACO
+        CLR R11
+        RET                               
+
+
+MULT_LACO:
+        PUSH.W R11                         ;GUARDA R15 NA PILHA
+        DEC.W R10                         ;GUARDA R14 NA PILHA
+        CALL #MULT
+        POP.W R10                          ; JOGA O VALOR DA PILHA EM R14
+        ADD.W R10,R11
+        RET
+;===============================================================================
+;            PRODUTO ESCALAR
+;===============================================================================
+
+PRODUTO:
+        MOV.W #0, R12             ;AUXILIAR
+        MOV.W #0, R9
+PRODUTO_0:
+        MOV.W 0(R15), R11
+        MOV.W 0(R14), R10
+        CALL #MULT
+        ADD.W R11, R9
+        INCD.W R15
+        INCD.W R14
+        INCD.W R12
+        CMP.W R13, R12
+        JGE FIM
+        JMP PRODUTO_0
+        
+FIM:
+        MOV.W R9, R15
+        RET
+        END
+```	
+
 10. (a) Escreva uma função em C que indica se um vetor é palíndromo. Por exemplo:
 	[1 2 3 2 1] e [0 10 20 20 10 0] são palíndromos.
 	[5 4 3 2 1] e [1 2 3 2] não são.
