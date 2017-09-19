@@ -1,133 +1,213 @@
-1. Escreva uma função em C que faz o debounce de botões ligados à porta P1.
+# Respostas às Perguntas Aula 10
+## Data: 18/09/2017
+1. Projete o hardware necessário para o MSP430 controlar um motor DC de 12V e 4A. Utilize transistores bipolares de junção (TBJ) com Vbe = 0,7 V, beta = 100 e Vce(saturação) = 0,2 V. Além disso, considere que Vcc = 3 V para o MSP430, e que este não pode fornecer mais do que 10 mA por porta digital.
 
+2. Projete o hardware necessário para o MSP430 controlar um motor DC de 10V e 1A. Utilize transistores bipolares de junção (TBJ) com Vbe = 0,7 V e beta = 120. Além disso, considere que Vcc = 3,5 V para o MSP430, e que este não pode fornecer mais do que 10 mA por porta digital.
 
+3. Projete o hardware utilizado para controlar 6 LEDs utilizando charlieplexing. Apresente os pinos utilizados no MSP430 e os LEDs, nomeados L1-L6.
 
-
-2. Escreva um código em C que lê 9 botões multiplexados por 6 pinos, e pisca os LEDs da placa Launchpad de acordo com os botões. Por exemplo, se o primeiro botão é pressionado, os LEDs piscam uma vez; se o segundo botão é pressionado, os LEDs piscam duas vezes; e assim por diante. Se mais de um botão é pressionado, os LEDs não piscam.
+4. Defina a função `void main(void){}` para controlar 6 LEDs de uma árvore de natal usando o hardware da questão anterior. Acenda os LEDs de forma que um ser humano veja todos acesos ao mesmo tempo.
 
 ```C
 
+#include <msp430g2553.h>
 #include <msp430.h>
-
 #define LED1 BIT0
 #define LED2 BIT6
-#define LEDS (LED1 | LED2)
-#define BARRA_Y (BIT1 + BIT2 + BIT3)
-#define BARRA_X (BIT4 + BIT5 + BIT7)
-#define TOTAL (Y_BARRA + X_BARRA)
+#define LEDS (LED1|LED2)
+#define LINHA1 BIT1
+#define LINHA2 BIT2
+#define LINHA3 BIT4
+#define BTN BIT3
 
 int main(void)
 {
-// Parar o watchdog timer
-	WDTCTL = WDTPW | WDTHOLD;
-	P1DIR |= LEDS;
-	P1DIR |= LEDS;
-	P1OUT &= ~LEDS;
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	int numero = 0;
-
-	while(1)
-	    {
-	        numero = multiplexa();
-	        pisca_led(numero);
-	        numero = 0;
-	    }
-	    return 0;
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-int multiplexa(void)
-	{
-    P1DIR |= LEDS;            // Configurar os LEDs E Y_BARRA COMO SAÍDA
-    P1DIR &= ~(BARRA_X);                // TODOS COMO ENTRADA
-    P1REN |= BARRA_X ;                          // Configurar pull-up e pull-down
-    P1OUT |= BARRA_X;                       // Escolher pull-UPP PARA X
-    P1OUT &= ~LEDS;
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    int linha = 1, coluna = 1, i, j, BTN = 0, aux=0;
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-//                         LINHAS --- [PULL-UP] ----- BARRA_X
-//////////////////////////////////////////////////////////////////////////////////////////////
-
-	if (((P1IN & BIT4) == 0)&&((P1IN & BIT5) == BIT5)&&((P1IN & BIT7) == BIT7))
-	        {
-	            linha = 1;
-	        } else if (((P1IN & BIT4) == BIT4)&&((P1IN & BIT5) == 0)&&((P1IN & BIT7) == BIT7))
-	        {
-	            linha = 2;
-	        } else if (((P1IN & BIT4) == BIT4)&&((P1IN & BIT5) == BIT5)&&((P1IN & BIT7) == 0))
-	        {
-	            linha = 3;
-	        } else { linha = 1;}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	P1DIR &= 0;
-    P1DIR |= LEDS;            // Configurar os LEDs E Y_BARRA COMO SAÍDA
-    P1DIR &= ~(BARRA_Y);                // TODOS COMO ENTRADA
-    P1REN |= BARRA_Y ;                          // Configurar pull-up e pull-down
-    P1OUT |= BARRA_Y;                       // Escolher pull-UPP PARA X
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-//                         COLUNAS --- [PULL-DOWN] ----- BARRA_Y
-//////////////////////////////////////////////////////////////////////////////////////////////
-
-	    if (((P1IN & BIT1) == 0)&&((P1IN & BIT2) == BIT2)&&((P1IN & BIT3)) == BIT3)
-	    {
-	        coluna = 3;
-	    } else if (((P1IN & BIT1) == BIT1)&&((P1IN & BIT2) == 0)&&((P1IN & BIT3) == BIT3))
-	    {
-	        coluna = 2;
-	    } else if (((P1IN & BIT1) == BIT1)&&((P1IN & BIT2) == BIT2)&&((P1IN & BIT3) == 0))
-	    {
-	        coluna = 3;
-	    } else { coluna = 0;}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	    if(linha==0 || coluna==0)
-	    {
-	        return 0; /*Nesse caso, nenhum botao foi pressionado, ou dois foram pressionados de uma vez*/
-	    }
-	    else
-	    {
-	    for (i = 1; i <= 4; i++)
-	    {
-	        for (j = 1; j <= 4; j++)
-	                {
-	                    if ((linha == i)&&(coluna == j))
-	                    {
-	                        BTN = aux;
-	                    }
-	                    aux++;
-	                }
-	    }
-	    }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	    return BTN;
-}
-
-void delay(volatile unsigned long int t)
-{
-    while(t--);
-}
-
-void pisca_led(int num_blink)
-{
-    while(num_blink>0)
+    WDTCTL = WDTPW|WDTHOLD;  //parar wdtctl--watchdog timer
+    P1DIR |= LEDS;          //DEFINE LEDS COMO SAIDAS.
+    int n;
+    while(1)
     {
-        num_blink--;
-        P1OUT ^= LED1;
-        delay(30000);
-        P1OUT ^= LED1;
-        delay(30000);
-    }
-}
+///////////////////////////////////////////////////////////////////
+//                  LED-1
+///////////////////////////////////////////////////////////////////
+    P1DIR |= (LINHA1 + LINHA2);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+    P1DIR &= ~(LINHA3);            //DEFINE LINHA3 COMO ENTRADA
+    P1OUT &= 0;
+    P1OUT |= LINHA1;           // SETA LINHA1
+    //for ( n = 0; n < 0XFFFF; n++);
+    ///////////////////////////////////////////////////////////////////
+    //                  LED-2
+    ///////////////////////////////////////////////////////////////////
+        P1DIR |= (LINHA1 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+        P1DIR &= ~(LINHA2);            //DEFINE LINHA3 COMO ENTRADA
+        P1OUT &= 0;
+        P1OUT |= LINHA1;           // SETA LINHA1
+        //for ( n = 0; n < 0XFFFF; n++);
+        ///////////////////////////////////////////////////////////////////
+        //                  LED-3
+        ///////////////////////////////////////////////////////////////////
+            P1DIR |= (LINHA1 + LINHA2);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+            P1DIR &= ~(LINHA3);            //DEFINE LINHA3 COMO ENTRADA
+            P1OUT &= 0;
+            P1OUT |= LINHA2;           // SETA LINHA1
+            //for ( n = 0; n < 0XFFFF; n++);
+            ///////////////////////////////////////////////////////////////////
+            //                  LED-4
+            ///////////////////////////////////////////////////////////////////
+                P1DIR |= (LINHA2 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+                P1DIR &= ~(LINHA1);            //DEFINE LINHA3 COMO ENTRADA
+                P1OUT &= 0;
+                P1OUT |= LINHA2;           // SETA LINHA1
+                //for ( n = 0; n < 0XFFFF; n++);
+///////////////////////////////////////////////////////////////////
+//                  LED-5
+///////////////////////////////////////////////////////////////////
+                            P1DIR |= (LINHA1 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+                            P1DIR &= ~(LINHA2);            //DEFINE LINHA3 COMO ENTRADA
+                            P1OUT &= 0;
+                            P1OUT |= LINHA3;           // SETA LINHA1
+                            //for ( n = 0; n < 0XFFFF; n++);
+///////////////////////////////////////////////////////////////////
+//                  LED-6
+///////////////////////////////////////////////////////////////////
+                                P1DIR |= (LINHA2 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+                                P1DIR &= ~(LINHA1);            //DEFINE LINHA3 COMO ENTRADA
+                                P1OUT &= 0;
+                                P1OUT |= LINHA3;           // SETA LINHA1
+                                //for ( n = 0; n < 0XFFFF; n++);
+
+        }
+    return 0;
+            }
+```
+
+5. Defina a função `void main(void){}` para controlar 6 LEDs de uma árvore de natal usando o hardware da questão 3. Acenda os LEDs de forma que um ser humano veja os LEDs L1 e L2 acesos juntos por um tempo, depois os LEDs L3 e L4 juntos, e depois os LEDs L5 e L6 juntos.
+
+6. Defina a função `void EscreveDigito(volatile char dig);` que escreve um dos dígitos 0x0-0xF em um único display de 7 segmentos via porta P1, baseado na figura abaixo. Considere que em outra parte do código os pinos P1.0-P1.6 já foram configurados para corresponderem aos LEDs A-G, e que estes LEDs possuem resistores externos para limitar a corrente.
 
 ```
+        ---  ==> A
+       |   |
+ F <== |   | ==> B
+       |   |
+        ---  ==> G
+       |   |
+ E <== |   | ==> C
+       |   |
+        ---  ==> D
+```
+
+```C
+/*
+ * Defina a função `void EscreveDigito(volatile char dig);` que escreve 
+ * um dos dígitos 0x0-0xF em um único display de 7 segmentos via porta
+ * P1, baseado na figura abaixo. Considere que em outra parte do código
+ * os pinos P1.0-P1.6 já foram configurados para corresponderem aos LEDs
+ * A-G, e que estes LEDs possuem resistores externos para limitar a
+ * corrente.
+
+        ---  ==> A
+       |   |
+ F <== |   | ==> B
+       |   |
+        ---  ==> G
+       |   |
+ E <== |   | ==> C
+       |   |
+        ---  ==> D
+ */
+
+#include <msp430.h>
+
+void EscreveDigito(volatile char dig)
+{
+	/* Considerar a ordem A-G = P1.0-P1.6 */
+	/* Catodo comum, acende em 1, se for anodo é só inverter com ~ */
+	const char zero = 	0x7E;
+	const char one = 	0x30;
+	const char two =	0x6D;
+	const char three =	0x79;
+	const char four =	0x33;
+	const char five =	0x5B;
+	const char six =	0x5F;
+	const char seven = 	0x70;
+	const char eight = 	0x7F;
+	const char nine = 	0x7B;
+	const char A10 =	0x77;
+	const char B11 = 	0x1F;
+	const char C12 =	0x4E;
+	const char D13 =	0x3D;
+	const char E14 =	0x4F;
+	const char F15 =	0x47;
+	
+	switch(dig){
+		case '0':
+		P1OUT |= zero;
+		break;
+		
+		case '1':
+		P1OUT |= one;
+		break;
+		
+		case '2':
+		P1OUT |= two;
+		break;
+		
+		case '3':
+		P1OUT |= three;
+		break;
+		
+		case '4':
+		P1OUT |= four;
+		break;
+		
+		case '5':
+		P1OUT |= five;
+		break;
+		
+		case '6':
+		P1OUT |= six;
+		break;
+		
+		case '7':
+		P1OUT |= seven;
+		break;
+		
+		case '8':
+		P1OUT |= eight;
+		break;
+		
+		case '9':
+		P1OUT |= nine;
+		break;
+		
+		case 'A':
+		P1OUT |= A10;
+		break;
+		
+		case 'B':
+		P1OUT |= B11;
+		break;
+		
+		case 'C':
+		P1OUT |= C12;
+		break;
+		
+		case 'D':
+		P1OUT |= D13;
+		break;
+		
+		case 'E':
+		P1OUT |= E14;
+		break;
+		
+		case 'F':
+		P1OUT |= F15;
+		break;
+	}
+}
+```
+
+
+7. Multiplexe 2 displays de 7 segmentos para apresentar a seguinte sequência em loop:
+	00 - 11 - 22 - 33 - 44 - 55 - 66 - 77 - 88 - 99 - AA - BB - CC - DD - EE - FF
