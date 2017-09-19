@@ -83,6 +83,73 @@ int main(void)
 
 5. Defina a função `void main(void){}` para controlar 6 LEDs de uma árvore de natal usando o hardware da questão 3. Acenda os LEDs de forma que um ser humano veja os LEDs L1 e L2 acesos juntos por um tempo, depois os LEDs L3 e L4 juntos, e depois os LEDs L5 e L6 juntos.
 
+```C
+#include "io430.h"
+#define LED1 BIT0
+#define LED2 BIT6
+#define LEDS (LED1|LED2)
+#define LINHA1 BIT1
+#define LINHA2 BIT2
+#define LINHA3 BIT4
+#define BTN BIT3
+
+int main(void)
+{
+    WDTCTL = WDTPW|WDTHOLD;  //parar wdtctl--watchdog timer
+    P1DIR |= LEDS;          //DEFINE LEDS COMO SAIDAS.
+    int n;
+    while(1)
+    {
+      
+///////////////////////////////////////////////////////////////////
+//                  LED-1 E LED-2
+///////////////////////////////////////////////////////////////////
+    P1DIR |= (LINHA1 + LINHA2);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+    P1DIR &= ~(LINHA3);            //DEFINE LINHA3 COMO ENTRADA
+    P1OUT &= 0;
+    P1OUT |= LINHA1;           // SETA LINHA1
+    //for ( n = 0; n < 0XFFFF; n++);
+    ///////////////////////////////////////////////////////////////////
+        P1DIR |= (LINHA1 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+        P1DIR &= ~(LINHA2);            //DEFINE LINHA3 COMO ENTRADA
+        P1OUT &= 0;
+        P1OUT |= LINHA1;           // SETA LINHA1
+        for ( n = 0; n < 0XFFFF; n++);
+        ///////////////////////////////////////////////////////////////////
+        //                  LED-3 E LED-4
+        ///////////////////////////////////////////////////////////////////
+            P1DIR |= (LINHA1 + LINHA2);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+            P1DIR &= ~(LINHA3);            //DEFINE LINHA3 COMO ENTRADA
+            P1OUT &= 0;
+            P1OUT |= LINHA2;           // SETA LINHA1
+            //for ( n = 0; n < 0XFFFF; n++);
+            ///////////////////////////////////////////////////////////////////
+                P1DIR |= (LINHA2 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+                P1DIR &= ~(LINHA1);            //DEFINE LINHA3 COMO ENTRADA
+                P1OUT &= 0;
+                P1OUT |= LINHA2;           // SETA LINHA1
+                for ( n = 0; n < 0XFFFF; n++);
+///////////////////////////////////////////////////////////////////
+//                  LED-5 E LED-6
+///////////////////////////////////////////////////////////////////
+                            P1DIR |= (LINHA1 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+                            P1DIR &= ~(LINHA2);            //DEFINE LINHA3 COMO ENTRADA
+                            P1OUT &= 0;
+                            P1OUT |= LINHA3;           // SETA LINHA1
+                            //for ( n = 0; n < 0XFFFF; n++);
+///////////////////////////////////////////////////////////////////
+                                P1DIR |= (LINHA2 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+                                P1DIR &= ~(LINHA1);            //DEFINE LINHA3 COMO ENTRADA
+                                P1OUT &= 0;
+                                P1OUT |= LINHA3;           // SETA LINHA1
+                                for ( n = 0; n < 0XFFFF; n++);
+
+        }
+    return 0;
+            }
+	    
+```
+
 6. Defina a função `void EscreveDigito(volatile char dig);` que escreve um dos dígitos 0x0-0xF em um único display de 7 segmentos via porta P1, baseado na figura abaixo. Considere que em outra parte do código os pinos P1.0-P1.6 já foram configurados para corresponderem aos LEDs A-G, e que estes LEDs possuem resistores externos para limitar a corrente.
 
 ```
