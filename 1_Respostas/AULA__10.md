@@ -47,16 +47,16 @@ Rb = (Vcc-Vbe)/Ib
 *****
 
 3. Projete o hardware utilizado para controlar 6 LEDs utilizando charlieplexing. Apresente os pinos utilizados no MSP430 e os LEDs, nomeados L1-L6.
-```
-P1.1----R-------------------------------------------------
+```	___	
+P1.1---|_R_|-----------------------------------------------
                   |       |                       |       |
                 L1▼     L2▲                       |       |
-                  |       |                       |       |
-P1.2----R--------------------------             L5▼     L6▲
+        ___       |       |                       |       |
+P1.2---|_R_|-----------------------             L5▼     L6▲
                           |       |               |       |
                         L3▼     L4▲               |       |
-                          |       |               |       |
-P1.3----R-------------------------------------------------
+        ___               |       |               |       |
+P1.4---|_R_|-----------------------------------------------
 ```
 *****
 4. Defina a função `void main(void){}` para controlar 6 LEDs de uma árvore de natal usando o hardware da questão anterior. Acenda os LEDs de forma que um ser humano veja todos acesos ao mesmo tempo.
@@ -78,59 +78,53 @@ int main(void)
     WDTCTL = WDTPW|WDTHOLD;  //parar wdtctl--watchdog timer
     P1DIR |= LEDS;          //DEFINE LEDS COMO SAIDAS.
     int n;
+    
     while(1)
     {
 ///////////////////////////////////////////////////////////////////
 //                  LED-1
 ///////////////////////////////////////////////////////////////////
-    P1DIR |= (LINHA1 + LINHA2);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
-    P1DIR &= ~(LINHA3);            //DEFINE LINHA3 COMO ENTRADA
-    P1OUT &= 0;
-    P1OUT |= LINHA1;           // SETA LINHA1
-    //for ( n = 0; n < 0XFFFF; n++);
-    ///////////////////////////////////////////////////////////////////
-    //                  LED-2
-    ///////////////////////////////////////////////////////////////////
-        P1DIR |= (LINHA1 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
-        P1DIR &= ~(LINHA2);            //DEFINE LINHA3 COMO ENTRADA
-        P1OUT &= 0;
-        P1OUT |= LINHA1;           // SETA LINHA1
-        //for ( n = 0; n < 0XFFFF; n++);
-        ///////////////////////////////////////////////////////////////////
-        //                  LED-3
-        ///////////////////////////////////////////////////////////////////
-            P1DIR |= (LINHA1 + LINHA2);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
-            P1DIR &= ~(LINHA3);            //DEFINE LINHA3 COMO ENTRADA
-            P1OUT &= 0;
-            P1OUT |= LINHA2;           // SETA LINHA1
-            //for ( n = 0; n < 0XFFFF; n++);
-            ///////////////////////////////////////////////////////////////////
-            //                  LED-4
-            ///////////////////////////////////////////////////////////////////
+                P1DIR |= (LINHA1 + LINHA2);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+                P1DIR &= ~(LINHA3);            //DEFINE LINHA3 COMO ENTRADA
+                P1OUT &= 0;
+                P1OUT |= LINHA1;           // SETA LINHA1
+///////////////////////////////////////////////////////////////////
+//                  LED-2
+///////////////////////////////////////////////////////////////////
+                P1DIR |= (LINHA1 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+                P1DIR &= ~(LINHA2);            //DEFINE LINHA3 COMO ENTRADA
+                P1OUT &= 0;
+                P1OUT |= LINHA1;           // SETA LINHA1
+///////////////////////////////////////////////////////////////////
+//                  LED-3
+///////////////////////////////////////////////////////////////////
+                P1DIR |= (LINHA1 + LINHA2);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+                P1DIR &= ~(LINHA3);            //DEFINE LINHA3 COMO ENTRADA
+                P1OUT &= 0;
+                P1OUT |= LINHA2;           // SETA LINHA1
+///////////////////////////////////////////////////////////////////
+//                  LED-4
+///////////////////////////////////////////////////////////////////
                 P1DIR |= (LINHA2 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
                 P1DIR &= ~(LINHA1);            //DEFINE LINHA3 COMO ENTRADA
                 P1OUT &= 0;
                 P1OUT |= LINHA2;           // SETA LINHA1
-                //for ( n = 0; n < 0XFFFF; n++);
 ///////////////////////////////////////////////////////////////////
 //                  LED-5
 ///////////////////////////////////////////////////////////////////
-                            P1DIR |= (LINHA1 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
-                            P1DIR &= ~(LINHA2);            //DEFINE LINHA3 COMO ENTRADA
-                            P1OUT &= 0;
-                            P1OUT |= LINHA3;           // SETA LINHA1
-                            //for ( n = 0; n < 0XFFFF; n++);
+                P1DIR |= (LINHA1 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+                P1DIR &= ~(LINHA2);            //DEFINE LINHA3 COMO ENTRADA
+                P1OUT &= 0;
+                P1OUT |= LINHA3;           // SETA LINHA1
 ///////////////////////////////////////////////////////////////////
 //                  LED-6
 ///////////////////////////////////////////////////////////////////
-                                P1DIR |= (LINHA2 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
-                                P1DIR &= ~(LINHA1);            //DEFINE LINHA3 COMO ENTRADA
-                                P1OUT &= 0;
-                                P1OUT |= LINHA3;           // SETA LINHA1
-                                //for ( n = 0; n < 0XFFFF; n++);
-
+                P1DIR |= (LINHA2 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+                P1DIR &= ~(LINHA1);            //DEFINE LINHA3 COMO ENTRADA
+                P1OUT &= 0;
+                P1OUT |= LINHA3;           // SETA LINHA1
         }
-    return 0;
+                return 0;
             }
 ```
 *****
