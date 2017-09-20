@@ -10,11 +10,15 @@ VCE = 0,2 V
 Vcc = 3 V
 Imax,msp = 10 ma
 
-A primeira coisa é obter um transistor que aguente a corrente de coletor dada pela carga, que nesse caso é o motor DC. A corrente de coletor necessária será de 4 A. A corrente de base será nesse caso
+A primeira coisa é obter um transistor que suporte a corrente de coletor dada pela carga,
+que nesse caso é o motor DC. A corrente de coletor necessária será de 4 A.
+A corrente de base será nesse caso:
 
 Ib = Ic / 100 = 4 / 100 = 40 mA.
 
-Como a corrente de base ultrapassa a corrente que a porta digital pode fornecer, então deve-se utilizar dois transistores, na forma do par Darlington. Então a corrente de base será
+Como a corrente de base ultrapassa a corrente que a porta digital pode fornecer,
+então deve-se utilizar dois transistores, na forma do par Darlington.
+Então a corrente de base será:
 
 Ib = Ic / β2 = 4 /10000 = 0,4 mA
 
@@ -43,6 +47,17 @@ Rb = (Vcc-Vbe)/Ib
 *****
 
 3. Projete o hardware utilizado para controlar 6 LEDs utilizando charlieplexing. Apresente os pinos utilizados no MSP430 e os LEDs, nomeados L1-L6.
+```
+P1.1----R-------------------------------------------------
+                  |       |                       |       |
+                L1▼     L2▲                       |       |
+                  |       |                       |       |
+P1.2----R--------------------------             L5▼     L6▲
+                          |       |               |       |
+                        L3▼     L4▲               |       |
+                          |       |               |       |
+P1.3----R-------------------------------------------------
+```
 *****
 4. Defina a função `void main(void){}` para controlar 6 LEDs de uma árvore de natal usando o hardware da questão anterior. Acenda os LEDs de forma que um ser humano veja todos acesos ao mesmo tempo.
 
