@@ -557,7 +557,7 @@ int main (void)
 {
     char sequencia [] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F'};
     int n=0;
-    while(n<=15)
+    while(1)
     {
     for(n=0; n<= 15; n++)
     {
