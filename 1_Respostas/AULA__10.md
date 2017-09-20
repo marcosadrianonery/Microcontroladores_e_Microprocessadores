@@ -138,7 +138,8 @@ int main(void)
 5. Defina a função `void main(void){}` para controlar 6 LEDs de uma árvore de natal usando o hardware da questão 3. Acenda os LEDs de forma que um ser humano veja os LEDs L1 e L2 acesos juntos por um tempo, depois os LEDs L3 e L4 juntos, e depois os LEDs L5 e L6 juntos.
 
 ```C
-#include "io430.h"
+#include <msp430g2553.h>
+#include <msp430.h>
 #define LED1 BIT0
 #define LED2 BIT6
 #define LEDS (LED1|LED2)
@@ -158,49 +159,51 @@ int main(void)
 ///////////////////////////////////////////////////////////////////
 //                  LED-1 E LED-2
 ///////////////////////////////////////////////////////////////////
-    P1DIR |= (LINHA1 + LINHA2);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
-    P1DIR &= ~(LINHA3);            //DEFINE LINHA3 COMO ENTRADA
-    P1OUT &= 0;
-    P1OUT |= LINHA1;           // SETA LINHA1
-    //for ( n = 0; n < 0XFFFF; n++);
-    ///////////////////////////////////////////////////////////////////
-        P1DIR |= (LINHA1 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
-        P1DIR &= ~(LINHA2);            //DEFINE LINHA3 COMO ENTRADA
-        P1OUT &= 0;
-        P1OUT |= LINHA1;           // SETA LINHA1
-        for ( n = 0; n < 0XFFFF; n++);
-        ///////////////////////////////////////////////////////////////////
-        //                  LED-3 E LED-4
-        ///////////////////////////////////////////////////////////////////
-            P1DIR |= (LINHA1 + LINHA2);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
-            P1DIR &= ~(LINHA3);            //DEFINE LINHA3 COMO ENTRADA
-            P1OUT &= 0;
-            P1OUT |= LINHA2;           // SETA LINHA1
-            //for ( n = 0; n < 0XFFFF; n++);
-            ///////////////////////////////////////////////////////////////////
-                P1DIR |= (LINHA2 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
-                P1DIR &= ~(LINHA1);            //DEFINE LINHA3 COMO ENTRADA
-                P1OUT &= 0;
-                P1OUT |= LINHA2;           // SETA LINHA1
-                for ( n = 0; n < 0XFFFF; n++);
+                for ( n = 0; n < 0XFFFF; n++)
+                {
+                    P1DIR |= (LINHA1 + LINHA2);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+                    P1DIR &= ~(LINHA3);            //DEFINE LINHA3 COMO ENTRADA
+                    P1OUT &= 0;
+                    P1OUT |= LINHA1;           // SETA LINHA1
+///////////////////////////////////////////////////////////////////
+                    P1DIR |= (LINHA1 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+                    P1DIR &= ~(LINHA2);            //DEFINE LINHA3 COMO ENTRADA
+                    P1OUT &= 0;
+                    P1OUT |= LINHA1;           // SETA LINHA1
+                    }
+///////////////////////////////////////////////////////////////////
+//                  LED-3 E LED-4
+///////////////////////////////////////////////////////////////////
+                for ( n = 0; n < 0XFFFF; n++)
+                {
+                    P1DIR |= (LINHA1 + LINHA2);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+                    P1DIR &= ~(LINHA3);            //DEFINE LINHA3 COMO ENTRADA
+                    P1OUT &= 0;
+                    P1OUT |= LINHA2;           // SETA LINHA1                    
+///////////////////////////////////////////////////////////////////
+                    P1DIR |= (LINHA2 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+                    P1DIR &= ~(LINHA1);            //DEFINE LINHA3 COMO ENTRADA
+                    P1OUT &= 0;
+                    P1OUT |= LINHA2;           // SETA LINHA1
+                }
 ///////////////////////////////////////////////////////////////////
 //                  LED-5 E LED-6
 ///////////////////////////////////////////////////////////////////
-                            P1DIR |= (LINHA1 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
-                            P1DIR &= ~(LINHA2);            //DEFINE LINHA3 COMO ENTRADA
-                            P1OUT &= 0;
-                            P1OUT |= LINHA3;           // SETA LINHA1
-                            //for ( n = 0; n < 0XFFFF; n++);
+                for ( n = 0; n < 0XFFFF; n++);
+                {
+                    P1DIR |= (LINHA1 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+                    P1DIR &= ~(LINHA2);            //DEFINE LINHA3 COMO ENTRADA
+                    P1OUT &= 0;
+                    P1OUT |= LINHA3;           // SETA LINHA1
 ///////////////////////////////////////////////////////////////////
-                                P1DIR |= (LINHA2 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
-                                P1DIR &= ~(LINHA1);            //DEFINE LINHA3 COMO ENTRADA
-                                P1OUT &= 0;
-                                P1OUT |= LINHA3;           // SETA LINHA1
-                                for ( n = 0; n < 0XFFFF; n++);
-
+                    P1DIR |= (LINHA2 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
+                    P1DIR &= ~(LINHA1);            //DEFINE LINHA3 COMO ENTRADA
+                    P1OUT &= 0;
+                    P1OUT |= LINHA3;           // SETA LINHA1
+                }    
         }
-    return 0;
-            }
+             return 0;
+}
 	    
 ```
 
