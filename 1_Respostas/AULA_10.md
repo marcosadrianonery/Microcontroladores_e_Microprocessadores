@@ -165,15 +165,11 @@ int main(void)
 ```
 
 ```C
-/*
- * Defina a função `void EscreveDigito(volatile char dig);` que escreve 
- * um dos dígitos 0x0-0xF em um único display de 7 segmentos via porta
- * P1, baseado na figura abaixo. Considere que em outra parte do código
- * os pinos P1.0-P1.6 já foram configurados para corresponderem aos LEDs
- * A-G, e que estes LEDs possuem resistores externos para limitar a
- * corrente.
+#include <msp430g2553.h>
+#include <msp430.h>
 
-        ---  ==> A
+/*
+ *      ---  ==> A
        |   |
  F <== |   | ==> B
        |   |
@@ -182,96 +178,109 @@ int main(void)
  E <== |   | ==> C
        |   |
         ---  ==> D
- */
-
-#include <msp430.h>
+*/
 
 void EscreveDigito(volatile char dig)
 {
-	/* Considerar a ordem A-G = P1.0-P1.6 */
-	/* Catodo comum, acende em 1, se for anodo é só inverter com ~ */
-	const char zero = 	0x7E;
-	const char one = 	0x30;
-	const char two =	0x6D;
-	const char three =	0x79;
-	const char four =	0x33;
-	const char five =	0x5B;
-	const char six =	0x5F;
-	const char seven = 	0x70;
-	const char eight = 	0x7F;
-	const char nine = 	0x7B;
-	const char A10 =	0x77;
-	const char B11 = 	0x1F;
-	const char C12 =	0x4E;
-	const char D13 =	0x3D;
-	const char E14 =	0x4F;
-	const char F15 =	0x47;
-	
-	switch(dig){
-		case '0':
-		P1OUT |= zero;
-		break;
-		
-		case '1':
-		P1OUT |= one;
-		break;
-		
-		case '2':
-		P1OUT |= two;
-		break;
-		
-		case '3':
-		P1OUT |= three;
-		break;
-		
-		case '4':
-		P1OUT |= four;
-		break;
-		
-		case '5':
-		P1OUT |= five;
-		break;
-		
-		case '6':
-		P1OUT |= six;
-		break;
-		
-		case '7':
-		P1OUT |= seven;
-		break;
-		
-		case '8':
-		P1OUT |= eight;
-		break;
-		
-		case '9':
-		P1OUT |= nine;
-		break;
-		
-		case 'A':
-		P1OUT |= A10;
-		break;
-		
-		case 'B':
-		P1OUT |= B11;
-		break;
-		
-		case 'C':
-		P1OUT |= C12;
-		break;
-		
-		case 'D':
-		P1OUT |= D13;
-		break;
-		
-		case 'E':
-		P1OUT |= E14;
-		break;
-		
-		case 'F':
-		P1OUT |= F15;
-		break;
-	}
+    char entrada;
+    int ZERO = 0x7E;
+    int UM   = 0x60;
+    int DOIS = 0x6D;
+    int TRES = 0x79;
+    int QUATRO = 0x33;
+    int CINCO = 0x5B;
+    int SEIS = 0x1F;
+    int SETE = 0x70;
+    int OITO = 0x7F;
+    int NOVE = 0x73;
+    int A = 0x77;
+    int B = 0x1F;
+    int C = 0x4D;
+    int D = 0x3D;
+    int E = 0x4F;
+    int F = 0x47;
+    
+    entrada = dig;
+    
+    if (entrada == 0)
+    {
+        P1OUT &= 0;         // desliga o que estiver acesso, zera saida
+        P1OUT |= ZERO;      //seta a saida, com a entrada
+    }
+    else if (entrada == 1)
+    {
+        P1OUT &= 0;
+        P1OUT |= UM;
+    }
+    else if (entrada == 2)
+    {
+        P1OUT &= 0;
+        P1OUT |= DOIS;
+    }
+    else if (entrada == 3)
+    {
+        P1OUT &= 0;
+        P1OUT |= TRES;
+    }
+    else if (entrada == 4)
+    {
+        P1OUT &= 0;
+        P1OUT |= QUATRO;
+    }
+    else if (entrada == 5)
+    {
+        P1OUT &= 0;
+        P1OUT |= CINCO;
+    }
+    else if (entrada == 6)
+    {
+        P1OUT &= 0;
+        P1OUT |= SEIS;
+    }
+    else if (entrada == 7)
+    {
+        P1OUT &= 0;
+        P1OUT |= SETE;
+    }
+    else if (entrada == 8)
+    {
+        P1OUT &= 0;
+        P1OUT |= OITO;
+    }
+    else if (entrada == 9)
+    {
+        P1OUT &= 0;
+        P1OUT |= NOVE;
+    }
+    else if (entrada == 10)
+    {
+        P1OUT &= 0;
+        P1OUT |= A;
+    }
+    else if (entrada == 11)
+    {
+        P1OUT &= 0;
+        P1OUT |= B;
+    }
+    else if (entrada == 12)
+    {
+        P1OUT &= 0;
+        P1OUT |= C;
+    }
+    else if (entrada == 13)
+    {
+        P1OUT &= 0;
+        P1OUT |= D;
+    }else if (entrada == 14)
+    {
+        P1OUT &= 0;
+        P1OUT |= E;
+    }else if (entrada == 15)
+    {
+        P1OUT &= 0;
+        P1OUT |= F;
+    }
+
 }
 ```
 
