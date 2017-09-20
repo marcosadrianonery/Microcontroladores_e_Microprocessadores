@@ -1,4 +1,5 @@
-## Data: 
+# Respostas às Perguntas Aula 9
+## Data: 18/09/2017
 
 1. Escreva uma função em C que faz o debounce de botões ligados à porta P1.
 
