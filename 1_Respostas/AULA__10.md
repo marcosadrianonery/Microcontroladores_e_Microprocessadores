@@ -183,7 +183,7 @@ int main(void)
 ///////////////////////////////////////////////////////////////////
 //                  LED-5 E LED-6
 ///////////////////////////////////////////////////////////////////
-                for ( n = 0; n < 0XFFFF; n++);
+                for ( n = 0; n < 0XFFFF; n++)
                 {
                     P1DIR |= (LINHA1 + LINHA3);            //DEFINE LINHA1 E LINHA2 COMO SAIDA
                     P1DIR &= ~(LINHA2);            //DEFINE LINHA3 COMO ENTRADA
