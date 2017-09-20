@@ -255,7 +255,6 @@ void EscreveDigito(volatile char dig)
     int D = 0x3D;
     int E = 0x4F;
     int F = 0x47;
-
     entrada = dig;
 	unsigned int P1OUT;
     if (entrada == 0)
@@ -346,11 +345,25 @@ void EscreveDigito(volatile char dig)
 	00 - 11 - 22 - 33 - 44 - 55 - 66 - 77 - 88 - 99 - AA - BB - CC - DD - EE - FF
 	
 ```C
-#include <stdlib.h>
-#include <stdio.h>
+#include <msp430g2553.h>
+#include <msp430.h>
+
+/*
+ *      ---  ==> A
+       |   |
+ F <== |   | ==> B
+       |   |
+        ---  ==> G
+       |   |
+ E <== |   | ==> C
+       |   |
+        ---  ==> D
+    CATODO COMUM ==> LIGA COM SAIDA IGUAL A 1
 
 
-void EscreveDigito_CATHODO(volatile char dig)
+*/
+
+void EscreveDigito(volatile char dig)
 {
     char entrada;
     int ZERO = 0x7E;
@@ -369,9 +382,7 @@ void EscreveDigito_CATHODO(volatile char dig)
     int D = 0x3D;
     int E = 0x4F;
     int F = 0x47;
-
     entrada = dig;
-	unsigned int P1OUT;
     if (entrada == 0)
     {
         P1OUT &= 0;         // desliga o que estiver acesso, zera saida
@@ -452,107 +463,6 @@ void EscreveDigito_CATHODO(volatile char dig)
     }
 }
 
-void EscreveDigito_ANODO(volatile char dig)
-{
-    char entrada;
-    int ZERO = 0x7E;
-    int UM   = 0x60;
-    int DOIS = 0x6D;
-    int TRES = 0x79;
-    int QUATRO = 0x33;
-    int CINCO = 0x5B;
-    int SEIS = 0x1F;
-    int SETE = 0x70;
-    int OITO = 0x7F;
-    int NOVE = 0x73;
-    int A = 0x77;
-    int B = 0x1F;
-    int C12 = 0x4D;
-    int D = 0x3D;
-    int E = 0x4F;
-    int F = 0x47;
-	long int P1OUT;
-    entrada = dig;
-    if (entrada == 0)
-    {
-        P1OUT &= 0;         // desliga o que estiver acesso, zera saida
-        P1OUT |= ~ZERO;      //seta a saida, com a entrada
-    }
-    else if (entrada == 1)
-    {
-        P1OUT &= 0;
-        P1OUT |= ~UM;
-    }
-    else if (entrada == 2)
-    {
-        P1OUT &= 0;
-        P1OUT |= ~DOIS;
-    }
-    else if (entrada == 3)
-    {
-        P1OUT &= 0;
-        P1OUT |= ~TRES;
-    }
-    else if (entrada == 4)
-    {
-        P1OUT &= 0;
-        P1OUT |= ~QUATRO;
-    }
-    else if (entrada == 5)
-    {
-        P1OUT &= 0;
-        P1OUT |= ~CINCO;
-    }
-    else if (entrada == 6)
-    {
-        P1OUT &= 0;
-        P1OUT |= ~SEIS;
-    }
-    else if (entrada == 7)
-    {
-        P1OUT &= 0;
-        P1OUT |= ~SETE;
-    }
-    else if (entrada == 8)
-    {
-        P1OUT &= 0;
-        P1OUT |= ~OITO;
-    }
-    else if (entrada == 9)
-    {
-        P1OUT &= 0;
-        P1OUT |= ~NOVE;
-    }
-    else if (entrada == 'A')
-    {
-        P1OUT &= 0;
-        P1OUT |= ~A;
-    }
-    else if (entrada == 'B')
-    {
-        P1OUT &= 0;
-        P1OUT |= ~B;
-    }
-    else if (entrada == 'C')
-    {
-        P1OUT &= 0;
-        P1OUT |= ~C12;
-    }
-    else if (entrada == 'D')
-    {
-        P1OUT &= 0;
-        P1OUT |= ~D;
-    }else if (entrada == 'E')
-    {
-        P1OUT &= 0;
-        P1OUT |= ~E;
-    }else if (entrada == 'F')
-    {
-        P1OUT &= 0;
-        P1OUT |= ~F;
-    }
-}
-
 int main (void)
 {
     char sequencia [] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F'};
@@ -561,10 +471,17 @@ int main (void)
     {
     for(n=0; n<= 15; n++)
     {
-    EscreveDigito_CATHODO(sequencia [n]);
-    
-    EscreveDigito_ANODO(sequencia [n]);
+        P2OUT |= 0x03;                 // ZERAR SAIDAS P2
+        P2DIR |= BIT0;              // DEFINIR SAIDA PARA ACIONAR DISPLAY 1
+        P2OUT |= ~BIT0;              // COMUM DO DISPLAY CATHODO
+        EscreveDigito(sequencia [n]);
+        P2OUT &= 0x03;                 // ZERAR SAIDAS P2
+        P2DIR |= BIT1;              // DEFINIR SAIDA PARA ACIONAR DISPLAY 1
+        P2OUT |= ~BIT1;              // COMUM DO DISPLAY CATHODO
+        EscreveDigito(sequencia [n]);
     }
     }
     return 0;
+}
+
 ```
