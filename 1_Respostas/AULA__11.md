@@ -255,9 +255,11 @@ int main(void)
     while(1)
     {
         P1OUT ^= LEDS;
-        atraso (10000);
+        atraso (1000);
+        atraso (1000);
         P1OUT ^= LEDS;
-        atraso (10000);
+        atraso (1000);
+        atraso (1000);
     }
     return 0;
 }
